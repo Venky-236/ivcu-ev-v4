@@ -1,0 +1,5 @@
+synth_out/
+qc/
+libs/
+lef/
+*.log
