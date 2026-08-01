@@ -105,38 +105,38 @@ opt
 dfflibmap -liberty $LIB
 $ABC_CMD
 
-# ---------- FINAL GATE ----------
-# -assert  : abort (non-zero exit) instead of merely printing
-# -mapped  : also flag any cell ABC failed to map
-#
-# THIS RUNS IMMEDIATELY AFTER abc, BEFORE any cleanup passes.
-# Earlier version of this script ran it after "splitnets -ports; opt_clean
-# -purge" and got 2330 false failures: splitnets bit-blasts every port into
-# individual wires, then opt_clean -purge deletes the nets that carried the
-# driver connections, so check sees every output port as undriven. The design
-# was fine; the check was being run on a mangled view of it.
-check -assert -mapped
-
 # ---------- cleanup ----------
 # setundef: tie any remaining x to 0 so P&R never sees an undefined value.
 # opt_clean WITHOUT -purge: -purge additionally removes unused *public* wires,
-# which is what destroyed the port connectivity above. Plain opt_clean only
-# removes genuinely unused private nets and is safe.
+# which destroys port connectivity. Plain opt_clean only removes genuinely
+# unused private nets and is safe.
 #
 # splitnets -ports is deliberately NOT used. OpenROAD does not need a
 # bit-blasted netlist and it inflates the output enormously.
 setundef -zero
 opt_clean
 
-# Informational re-check after cleanup. NOT asserted -- if cleanup introduces
-# complaints we want to see them without losing the netlist.
-check
-
 # ---------- report ----------
 stat -liberty $LIB
 
-# ---------- emit ----------
+# ---------- WRITE FIRST, THEN JUDGE ----------
+# The netlist is written BEFORE the assert runs. After a multi-hour run you
+# always end up with a file you can inspect, even if it turns out to be bad.
+# The wrapper script renames it to *_REJECTED_* if the check fails, so a bad
+# netlist can never be mistaken for a good one later.
 write_verilog -noattr $NETLIST
+
+# ---------- FINAL GATE ----------
+# -assert  : exit non-zero instead of merely printing
+# -mapped  : also flag any cell ABC failed to map
+#
+# Runs on the real mapped netlist, after cleanup but with no port-mangling
+# passes in between. An earlier version ran this after "splitnets -ports;
+# opt_clean -purge" and produced 2330 false failures -- splitnets bit-blasts
+# every port into single wires and -purge then deletes the nets carrying the
+# driver connections, so every output looked undriven. The design was fine;
+# the check was looking at a mangled view of it.
+check -assert -mapped
 EOF
 
 # ---- run --------------------------------------------------------------------
@@ -154,22 +154,44 @@ echo
 echo "finished : $(date)"
 echo "exit code: $RC"
 
+PEAKKB=$(awk '/Maximum resident set size/{print $NF}' "$OUT/time_${MODE}_${STAMP}.txt" 2>/dev/null)
+WALL=$(awk -F': ' '/Elapsed \(wall clock\)/{print $NF}' "$OUT/time_${MODE}_${STAMP}.txt" 2>/dev/null)
+
 if [ $RC -ne 0 ]; then
   echo
-  echo "*** SYNTHESIS FAILED -- no netlist written (this is the intended behaviour) ***"
+  # Exit 137 = killed by signal 9 = almost always the Linux OOM killer.
+  if [ $RC -eq 137 ] || [ $RC -eq 9 ]; then
+    echo "*** KILLED -- almost certainly OUT OF MEMORY, not a design fault ***"
+    echo "    Confirm with:  dmesg | grep -iE 'killed process|out of memory' | tail -5"
+    echo "    Then rerun in fast mode:  $0 fast"
+  else
+    echo "*** SYNTHESIS CHECK FAILED ***"
+    echo "    The netlist WAS written, but it did not pass check -assert."
+    echo "    It is renamed with REJECTED so it can never be mistaken for good."
+  fi
+  if [ -f "$NETLIST" ]; then
+    BAD="$OUT/REJECTED_$(basename "$NETLIST")"
+    mv "$NETLIST" "$BAD"
+    echo
+    echo "    rejected netlist kept for inspection: $BAD"
+  fi
+  echo "    peak memory: ${PEAKKB:-unknown} kB      wall clock: ${WALL:-unknown}"
+  echo
   echo "--- last 30 log lines ---"
   tail -30 "$LOG"
   exit $RC
 fi
 
 echo
+echo "=== PASSED ==="
 echo "=== chip area ==="
 grep -i "Chip area" "$LOG"
 echo "=== SRAM macro instance (want exactly 1) ==="
 grep -c "fault_log_sram_1024x32" "$NETLIST"
 echo "=== DFF instances ==="
 grep -c "sky130_fd_sc_hd__df" "$NETLIST"
-echo "=== peak memory ==="
-grep -E "Maximum resident set size" "$OUT/time_${MODE}_${STAMP}.txt"
+echo "=== resources ==="
+echo "peak memory: ${PEAKKB:-unknown} kB"
+echo "wall clock : ${WALL:-unknown}"
 echo
 echo "netlist: $NETLIST"
