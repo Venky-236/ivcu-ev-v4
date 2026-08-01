@@ -105,16 +105,32 @@ opt
 dfflibmap -liberty $LIB
 $ABC_CMD
 
-# ---------- cleanup ----------
-setundef -zero
-splitnets -ports
-opt_clean -purge
-
 # ---------- FINAL GATE ----------
 # -assert  : abort (non-zero exit) instead of merely printing
 # -mapped  : also flag any cell ABC failed to map
-# Nothing gets written unless this passes.
+#
+# THIS RUNS IMMEDIATELY AFTER abc, BEFORE any cleanup passes.
+# Earlier version of this script ran it after "splitnets -ports; opt_clean
+# -purge" and got 2330 false failures: splitnets bit-blasts every port into
+# individual wires, then opt_clean -purge deletes the nets that carried the
+# driver connections, so check sees every output port as undriven. The design
+# was fine; the check was being run on a mangled view of it.
 check -assert -mapped
+
+# ---------- cleanup ----------
+# setundef: tie any remaining x to 0 so P&R never sees an undefined value.
+# opt_clean WITHOUT -purge: -purge additionally removes unused *public* wires,
+# which is what destroyed the port connectivity above. Plain opt_clean only
+# removes genuinely unused private nets and is safe.
+#
+# splitnets -ports is deliberately NOT used. OpenROAD does not need a
+# bit-blasted netlist and it inflates the output enormously.
+setundef -zero
+opt_clean
+
+# Informational re-check after cleanup. NOT asserted -- if cleanup introduces
+# complaints we want to see them without losing the netlist.
+check
 
 # ---------- report ----------
 stat -liberty $LIB
