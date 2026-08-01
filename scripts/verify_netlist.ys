@@ -1,0 +1,5 @@
+read_liberty -lib /home/venky/final_ivcu_project/libs/sky130_fd_sc_hd__tt_025C_1v80.lib
+read_verilog /tmp/sram_bb.v
+read_verilog /home/venky/final_ivcu_project/synth_out/REJECTED_ivcu_ev_v3_hybrid_top_gate_full_20260801_112308.v
+hierarchy -check -top ivcu_ev_v3_hybrid_top
+check
