@@ -1,0 +1,490 @@
+
+############################################################
+#  1. WORST SLACK PER CLOCK DOMAIN
+#     One number per domain. Tells you which domains are
+#     actually in trouble before you read any path detail.
+############################################################
+
+---- clk_10mhz_aon ----
+max_delay/setup group clk_10mhz_aon
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_mode_controller/_439_/DE (sky130_fd_sc_hd__edfxtp_1)   99.297   75.952   23.345 (MET)
+
+
+---- clk_50mhz_sensor ----
+max_delay/setup group clk_50mhz_sensor
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_reset_sync/_224_/D (sky130_fd_sc_hd__dfrtp_1)    3.354  442.818 -439.463 (VIOLATED)
+
+
+---- clk_100mhz ----
+max_delay/setup group clk_100mhz
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_thermal_ai/_1066_/DE (sky130_fd_sc_hd__edfxtp_1)    9.253  138.904 -129.651 (VIOLATED)
+
+
+---- clk_200mhz_mcu ----
+max_delay/setup group clk_200mhz_mcu
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_mcu_interface/_1130_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+
+
+---- asynchronous ----
+max_delay/setup group asynchronous
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_adc_interface/_15582_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+
+
+############################################################
+#  2. VIOLATING ENDPOINTS PER DOMAIN  (up to 40 each)
+#     One line per path. Look at WHICH MODULE the endpoint
+#     is in -- that is what tells you where the work is.
+############################################################
+
+================ PATH GROUP: clk_50mhz_sensor ================
+max_delay/setup group clk_50mhz_sensor
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_reset_sync/_224_/D (sky130_fd_sc_hd__dfrtp_1)    3.354  442.818 -439.463 (VIOLATED)
+u_reset_sync/_225_/D (sky130_fd_sc_hd__dfrtp_1)    3.354  442.818 -439.463 (VIOLATED)
+u_reset_sync/_228_/D (sky130_fd_sc_hd__dfrtp_1)    3.354  442.818 -439.463 (VIOLATED)
+u_reset_sync/_226_/D (sky130_fd_sc_hd__dfrtp_1)   -0.122  427.128 -427.250 (VIOLATED)
+u_reset_sync/_229_/D (sky130_fd_sc_hd__dfrtp_1)   -0.122  427.128 -427.250 (VIOLATED)
+u_reset_sync/_223_/D (sky130_fd_sc_hd__dfrtp_1)    3.069  429.374 -426.306 (VIOLATED)
+
+
+================ PATH GROUP: clk_100mhz ================
+max_delay/setup group clk_100mhz
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_thermal_ai/_1066_/DE (sky130_fd_sc_hd__edfxtp_1)    9.253  138.904 -129.651 (VIOLATED)
+u_thermal_ai/_1067_/DE (sky130_fd_sc_hd__edfxtp_1)    9.253  138.904 -129.651 (VIOLATED)
+u_thermal_ai/_1068_/DE (sky130_fd_sc_hd__edfxtp_1)    9.253  138.904 -129.651 (VIOLATED)
+u_perception_ai/_2921_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2922_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2923_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2924_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2925_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2926_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2927_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2928_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2941_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2942_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2943_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2944_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2945_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2946_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2947_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_perception_ai/_2948_/DE (sky130_fd_sc_hd__edfxtp_1)    9.293  133.572 -124.279 (VIOLATED)
+u_thermal_ai/_1029_/DE (sky130_fd_sc_hd__edfxtp_1)    9.295  133.231 -123.936 (VIOLATED)
+u_thermal_ai/_1030_/DE (sky130_fd_sc_hd__edfxtp_1)    9.295  133.231 -123.936 (VIOLATED)
+u_thermal_ai/_1031_/DE (sky130_fd_sc_hd__edfxtp_1)    9.295  133.231 -123.936 (VIOLATED)
+u_thermal_ai/_1011_/DE (sky130_fd_sc_hd__edfxtp_1)    9.279  133.084 -123.805 (VIOLATED)
+u_thermal_ai/_1012_/DE (sky130_fd_sc_hd__edfxtp_1)    9.279  133.084 -123.805 (VIOLATED)
+u_perception_ai/_3108_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_perception_ai/_3117_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_710_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_711_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_712_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_713_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_714_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_715_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_716_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_system_health/_717_/DE (sky130_fd_sc_hd__edfxtp_1)    3.232  126.233 -123.001 (VIOLATED)
+u_reset_sync/_216_/D (sky130_fd_sc_hd__dfrtp_1)    4.943  126.464 -121.520 (VIOLATED)
+u_reset_sync/_217_/D (sky130_fd_sc_hd__dfrtp_1)    4.943  126.464 -121.520 (VIOLATED)
+u_reset_sync/_220_/D (sky130_fd_sc_hd__dfrtp_1)    4.943  126.464 -121.520 (VIOLATED)
+u_reset_sync/_218_/D (sky130_fd_sc_hd__dfrtp_1)    3.958  122.015 -118.057 (VIOLATED)
+u_reset_sync/_221_/D (sky130_fd_sc_hd__dfrtp_1)    3.958  122.015 -118.057 (VIOLATED)
+u_reset_sync/_215_/D (sky130_fd_sc_hd__dfrtp_1)    4.863  122.650 -117.787 (VIOLATED)
+
+
+================ PATH GROUP: clk_200mhz_mcu ================
+max_delay/setup group clk_200mhz_mcu
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_mcu_interface/_1130_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1131_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1132_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1133_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1134_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1135_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1136_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1137_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1138_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1139_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1280_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1281_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1282_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1283_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1284_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1285_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1286_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1287_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1288_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1289_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1290_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1291_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1292_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1293_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1294_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1295_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1296_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1297_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1298_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1299_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1300_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1301_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1302_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1303_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1304_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1305_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1306_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1307_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1308_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+u_mcu_interface/_1309_/DE (sky130_fd_sc_hd__edfxtp_1)    4.275   29.904  -25.629 (VIOLATED)
+
+
+================ PATH GROUP: clk_10mhz_aon ================
+No paths found.
+
+
+================ PATH GROUP: asynchronous ================
+max_delay/setup group asynchronous
+
+                                     Required   Actual
+Endpoint                                Delay    Delay    Slack
+---------------------------------------------------------------
+u_adc_interface/_15582_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15583_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15584_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15585_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15586_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15587_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15588_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15589_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15590_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15591_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15592_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15593_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15594_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15595_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15596_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15597_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15598_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15599_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15600_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15601_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15602_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15603_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15604_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15605_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15606_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15607_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15608_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15609_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15610_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15611_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15612_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15613_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15614_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15615_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15616_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15617_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15618_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15619_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15620_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+u_adc_interface/_15621_/RESET_B (sky130_fd_sc_hd__dfrtp_1) -143.502  442.250 -585.752 (VIOLATED)
+
+
+############################################################
+#  3. THE ONE PATH THAT MATTERS PER DOMAIN, IN FULL
+#     Full gate-by-gate detail for the single worst path in
+#     each domain, so we can see what logic is actually on it.
+############################################################
+
+================ WORST PATH, clk_50mhz_sensor ================
+Startpoint: u_reset_sync/_223_
+            (rising edge-triggered flip-flop clocked by clk_50mhz_sensor)
+Endpoint: u_reset_sync/_224_
+          (rising edge-triggered flip-flop clocked by clk_50mhz_sensor)
+Path Group: clk_50mhz_sensor
+Path Type: max
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk_50mhz_sensor (rise edge)
+   0.000    0.000   clock network delay (ideal)
+   0.000    0.000 ^ u_reset_sync/_223_/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.387    0.387 v u_reset_sync/_223_/Q (sky130_fd_sc_hd__dfrtp_1)
+   0.585    0.972 v u_reset_sync/_164_/X (sky130_fd_sc_hd__or4_1)
+   0.467    1.440 v u_reset_sync/_167_/X (sky130_fd_sc_hd__or4_1)
+ 440.810  442.250 ^ u_reset_sync/_169_/Y (sky130_fd_sc_hd__o21ai_0)
+   0.568  442.818 v u_reset_sync/_180_/Y (sky130_fd_sc_hd__nor2_1)
+   0.000  442.818 v u_reset_sync/_224_/D (sky130_fd_sc_hd__dfrtp_1)
+          442.818   data arrival time
+
+  20.000   20.000   clock clk_50mhz_sensor (rise edge)
+   0.000   20.000   clock network delay (ideal)
+  -0.300   19.700   clock uncertainty
+   0.000   19.700   clock reconvergence pessimism
+           19.700 ^ u_reset_sync/_224_/CLK (sky130_fd_sc_hd__dfrtp_1)
+ -16.346    3.354   library setup time
+            3.354   data required time
+-----------------------------------------------------------
+            3.354   data required time
+         -442.818   data arrival time
+-----------------------------------------------------------
+         -439.463   slack (VIOLATED)
+
+
+
+================ WORST PATH, clk_100mhz ================
+Startpoint: u_reset_sync/_215_
+            (rising edge-triggered flip-flop clocked by clk_100mhz)
+Endpoint: u_thermal_ai/_1066_
+          (rising edge-triggered flip-flop clocked by clk_100mhz)
+Path Group: clk_100mhz
+Path Type: max
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk_100mhz (rise edge)
+   0.000    0.000   clock network delay (ideal)
+   0.000    0.000 ^ u_reset_sync/_215_/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.385    0.385 v u_reset_sync/_215_/Q (sky130_fd_sc_hd__dfrtp_1)
+   0.602    0.987 v u_reset_sync/_183_/X (sky130_fd_sc_hd__or4_1)
+   0.468    1.455 v u_reset_sync/_186_/X (sky130_fd_sc_hd__or4_1)
+ 124.778  126.233 ^ u_reset_sync/_188_/Y (sky130_fd_sc_hd__o21ai_0)
+  12.671  138.904 ^ u_thermal_ai/_0950_/X (sky130_fd_sc_hd__and3_1)
+   0.000  138.904 ^ u_thermal_ai/_1066_/DE (sky130_fd_sc_hd__edfxtp_1)
+          138.904   data arrival time
+
+  10.000   10.000   clock clk_100mhz (rise edge)
+   0.000   10.000   clock network delay (ideal)
+  -0.300    9.700   clock uncertainty
+   0.000    9.700   clock reconvergence pessimism
+            9.700 ^ u_thermal_ai/_1066_/CLK (sky130_fd_sc_hd__edfxtp_1)
+  -0.447    9.253   library setup time
+            9.253   data required time
+-----------------------------------------------------------
+            9.253   data required time
+         -138.904   data arrival time
+-----------------------------------------------------------
+         -129.651   slack (VIOLATED)
+
+
+
+================ WORST PATH, clk_200mhz_mcu ================
+Startpoint: u_reset_sync/_240_
+            (rising edge-triggered flip-flop clocked by clk_200mhz_mcu)
+Endpoint: u_mcu_interface/_1130_
+          (rising edge-triggered flip-flop clocked by clk_200mhz_mcu)
+Path Group: clk_200mhz_mcu
+Path Type: max
+
+   Delay     Time   Description
+-----------------------------------------------------------
+   0.000    0.000   clock clk_200mhz_mcu (rise edge)
+   0.000    0.000   clock network delay (ideal)
+   0.000    0.000 ^ u_reset_sync/_240_/CLK (sky130_fd_sc_hd__dfrtp_1)
+   0.387    0.387 v u_reset_sync/_240_/Q (sky130_fd_sc_hd__dfrtp_1)
+   0.569    0.956 v u_reset_sync/_126_/X (sky130_fd_sc_hd__or4_1)
+   0.481    1.437 v u_reset_sync/_129_/X (sky130_fd_sc_hd__or4_1)
+  25.562   27.000 ^ u_reset_sync/_130_/Y (sky130_fd_sc_hd__o21ai_0)
+   2.905   29.904 ^ u_mcu_interface/_1052_/X (sky130_fd_sc_hd__and2_0)
+   0.000   29.904 ^ u_mcu_interface/_1130_/DE (sky130_fd_sc_hd__edfxtp_1)
+           29.904   data arrival time
+
+   5.000    5.000   clock clk_200mhz_mcu (rise edge)
+   0.000    5.000   clock network delay (ideal)
+  -0.300    4.700   clock uncertainty
+   0.000    4.700   clock reconvergence pessimism
+            4.700 ^ u_mcu_interface/_1130_/CLK (sky130_fd_sc_hd__edfxtp_1)
+  -0.425    4.275   library setup time
+            4.275   data required time
+-----------------------------------------------------------
+            4.275   data required time
+          -29.904   data arrival time
+-----------------------------------------------------------
+          -25.629   slack (VIOLATED)
+
+
+
+############################################################
+#  4. HIGH-FANOUT NETS  (the reset problem, quantified)
+#     Expect exactly the four reset nets plus por_n. If any
+#     OTHER net shows up with fanout in the hundreds, that
+#     is new information and worth knowing about.
+############################################################
+max fanout
+
+Pin                                   Limit Fanout  Slack
+---------------------------------------------------------
+u_reset_sync/_169_/Y                     32   5962  -5930 (VIOLATED)
+u_reset_sync/_188_/Y                     32   1698  -1666 (VIOLATED)
+u_reset_sync/_150_/Y                     32    911   -879 (VIOLATED)
+u_reset_sync/_130_/Y                     32    347   -315 (VIOLATED)
+u_battery_ai/u_div_ir/_0728_/Y           32    129    -97 (VIOLATED)
+u_perception_ai/u_div_ttc/_0728_/Y       32    129    -97 (VIOLATED)
+u_mcu_interface/_0548_/Y                 32    104    -72 (VIOLATED)
+u_sensor_fabric/_40782_/Q                32     69    -37 (VIOLATED)
+u_mcu_interface/_0614_/Y                 32     68    -36 (VIOLATED)
+u_battery_ai/u_div_ir/_0714_/X           32     67    -35 (VIOLATED)
+u_perception_ai/u_div_ttc/_0714_/X       32     67    -35 (VIOLATED)
+u_battery_ai/u_div_ir/_1488_/Q           32     65    -33 (VIOLATED)
+u_perception_ai/u_div_ttc/_1488_/Q       32     65    -33 (VIOLATED)
+u_battery_ai/u_div_ir/_0710_/Y           32     59    -27 (VIOLATED)
+u_perception_ai/u_div_ttc/_0710_/Y       32     59    -27 (VIOLATED)
+u_battery_ai/u_div_ir/_0724_/Y           32     58    -26 (VIOLATED)
+u_perception_ai/u_div_ttc/_0724_/Y       32     58    -26 (VIOLATED)
+por_n                                    32     54    -22 (VIOLATED)
+u_sensor_fabric/_20781_/Y                32     51    -19 (VIOLATED)
+u_sensor_fabric/_21626_/Y                32     51    -19 (VIOLATED)
+u_sensor_fabric/_18746_/Y                32     50    -18 (VIOLATED)
+u_sensor_fabric/_22368_/Y                32     50    -18 (VIOLATED)
+u_sensor_fabric/_22258_/Y                32     49    -17 (VIOLATED)
+u_sensor_fabric/_22471_/Y                32     49    -17 (VIOLATED)
+u_sensor_fabric/_21095_/Y                32     48    -16 (VIOLATED)
+u_sensor_fabric/_22580_/Y                32     48    -16 (VIOLATED)
+u_sensor_fabric/_40794_/Q                32     48    -16 (VIOLATED)
+u_sensor_fabric/_40813_/Q                32     48    -16 (VIOLATED)
+u_sensor_fabric/_18950_/Y                32     47    -15 (VIOLATED)
+u_sensor_fabric/_19064_/Y                32     47    -15 (VIOLATED)
+u_sensor_fabric/_22054_/Y                32     47    -15 (VIOLATED)
+u_sensor_fabric/_22693_/Y                32     47    -15 (VIOLATED)
+u_sensor_fabric/_22916_/Y                32     47    -15 (VIOLATED)
+u_sensor_fabric/_19283_/Y                32     45    -13 (VIOLATED)
+u_battery_ai/_07062_/Y                   32     44    -12 (VIOLATED)
+u_battery_ai/_07548_/Y                   32     44    -12 (VIOLATED)
+u_fault_logger/_193_/Y                   32     44    -12 (VIOLATED)
+u_sensor_fabric/_19168_/Y                32     44    -12 (VIOLATED)
+u_mode_controller/_392_/X                32     43    -11 (VIOLATED)
+u_sensor_fabric/_21425_/Y                32     43    -11 (VIOLATED)
+u_sensor_fabric/_22149_/Y                32     43    -11 (VIOLATED)
+u_sensor_fabric/_23028_/Y                32     43    -11 (VIOLATED)
+u_sensor_fabric/_41046_/Q                32     43    -11 (VIOLATED)
+u_mcu_interface/_1052_/X                 32     42    -10 (VIOLATED)
+u_sensor_enable_logic/_087_/Y            32     42    -10 (VIOLATED)
+u_sensor_enable_logic/_088_/X            32     42    -10 (VIOLATED)
+u_sensor_fabric/_19614_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_19723_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_19941_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_20044_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_20250_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_20883_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_21531_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_21844_/Y                32     42    -10 (VIOLATED)
+u_sensor_fabric/_18640_/Y                32     41     -9 (VIOLATED)
+u_sensor_fabric/_20148_/Y                32     41     -9 (VIOLATED)
+u_sensor_fabric/_20577_/Y                32     41     -9 (VIOLATED)
+u_sensor_fabric/_20985_/Y                32     41     -9 (VIOLATED)
+u_battery_ai/_06965_/Y                   32     40     -8 (VIOLATED)
+u_sensor_fabric/_19831_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_20357_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_20463_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_21209_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_21317_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_22807_/Y                32     40     -8 (VIOLATED)
+u_sensor_fabric/_18848_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_18849_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_19391_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_19392_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_19504_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_19505_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_20680_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_20681_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_21737_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_21738_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_21946_/Y                32     39     -7 (VIOLATED)
+u_sensor_fabric/_21947_/Y                32     39     -7 (VIOLATED)
+u_thermal_ai/_0668_/Y                    32     39     -7 (VIOLATED)
+u_sensor_fabric/_19832_/Y                32     38     -6 (VIOLATED)
+u_sensor_fabric/_20358_/Y                32     38     -6 (VIOLATED)
+u_sensor_fabric/_21318_/Y                32     38     -6 (VIOLATED)
+u_sensor_fabric/_22806_/Y                32     38     -6 (VIOLATED)
+u_sensor_fabric/_40802_/Q                32     38     -6 (VIOLATED)
+vdd_core                                 32     37     -5 (VIOLATED)
+u_dynamics_ai/_4362_/X                   32     37     -5 (VIOLATED)
+u_sensor_fabric/_20149_/Y                32     37     -5 (VIOLATED)
+u_sensor_fabric/_20576_/Y                32     37     -5 (VIOLATED)
+u_sensor_fabric/_20986_/Y                32     37     -5 (VIOLATED)
+u_sensor_fabric/_21208_/Y                32     37     -5 (VIOLATED)
+u_battery_ai/u_div_ir/_0715_/Y           32     36     -4 (VIOLATED)
+u_central_fsm/_1222_/X                   32     36     -4 (VIOLATED)
+u_perception_ai/u_div_ttc/_0715_/Y       32     36     -4 (VIOLATED)
+u_sensor_fabric/_18641_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_19615_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_19724_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_20045_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_20251_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_20884_/Y                32     36     -4 (VIOLATED)
+u_sensor_fabric/_21843_/Y                32     36     -4 (VIOLATED)
+u_battery_ai/u_div_ir/_0935_/X           32     35     -3 (VIOLATED)
+u_central_fsm/_1221_/Y                   32     35     -3 (VIOLATED)
+u_mcu_interface/_0536_/Y                 32     35     -3 (VIOLATED)
+u_mcu_interface/_0919_/Y                 32     35     -3 (VIOLATED)
+u_perception_ai/u_div_ttc/_0935_/X       32     35     -3 (VIOLATED)
+u_sensor_fabric/_19942_/Y                32     35     -3 (VIOLATED)
+u_sensor_fabric/_20462_/Y                32     35     -3 (VIOLATED)
+u_sensor_fabric/_21426_/Y                32     35     -3 (VIOLATED)
+u_sensor_fabric/_21532_/Y                32     35     -3 (VIOLATED)
+u_sensor_fabric/_22150_/Y                32     35     -3 (VIOLATED)
+u_sensor_fabric/_41048_/Q                32     35     -3 (VIOLATED)
+u_sensor_fabric/_41049_/Q                32     35     -3 (VIOLATED)
+u_emergency/_1502_/Q                     32     34     -2 (VIOLATED)
+u_mcu_interface/_0678_/Y                 32     34     -2 (VIOLATED)
+u_sensor_fabric/_19167_/Y                32     34     -2 (VIOLATED)
+u_sensor_fabric/_23029_/Y                32     34     -2 (VIOLATED)
+u_sensor_fabric/_41080_/Q                32     34     -2 (VIOLATED)
+u_sensor_fabric/_41174_/Q                32     34     -2 (VIOLATED)
+u_fault_logger/_518_/Q                   32     33        (VIOLATED)
+u_mcu_interface/_0537_/Y                 32     33        (VIOLATED)
+u_mcu_interface/_0580_/Y                 32     33        (VIOLATED)
+
+
+############################################################
+#  5. POWER  --  sanity-check the units
+#     The macro row previously read 8.121e+06 W, i.e. 8
+#     megawatts, which is a unit declaration bug in the
+#     OpenRAM liberty, not a real number. Confirm with:
+#        grep -iE 'power_unit|leakage_power_unit' \
+#          macros/sram_512x32_2port_TT_1p8V_25C.lib
+#     Standard-cell rows are the trustworthy ones for now.
+############################################################
+Group                  Internal  Switching    Leakage      Total
+                          Power      Power      Power      Power (Watts)
+----------------------------------------------------------------
+Sequential            3.669e-02  7.463e-03  1.247e-07  4.415e-02   0.0%
+Combinational         1.788e-01  1.594e-01  1.353e-07  3.382e-01   0.0%
+Clock                 0.000e+00  0.000e+00  0.000e+00  0.000e+00   0.0%
+Macro                 8.121e+06  0.000e+00  3.541e-05  8.121e+06 100.0%
+Pad                   0.000e+00  0.000e+00  0.000e+00  0.000e+00   0.0%
+----------------------------------------------------------------
+Total                 8.121e+06  1.668e-01  3.568e-05  8.121e+06 100.0%
+                         100.0%       0.0%       0.0%
+
+############################################################
+#  DIAGNOSTIC STA COMPLETE
+############################################################

@@ -281,20 +281,16 @@ module battery_predictive_ai_complete (
     // ==================== PREDICTIVE ALGORITHMS ========
     always @(posedge clk_ai or negedge rst_ai_n) begin : predictive
         if (!rst_ai_n) begin
-            remaining_capacity <= 16'd0;
             charge_cycles <= 16'd0;
             thermal_cycles <= 16'd0;
             predictive_alerts <= 8'd0;
             estimated_range_km <= 16'd0;
             charging_safety_ok <= 1'b1;
         end else begin
-            // Estimate remaining capacity.
-            // The 16x16 multiply now happens one cycle earlier, in the
-            // remaining_capacity_mul block below. Only the divide-by-constant
-            // is left here, so this path is roughly a third of its old depth.
-            if (soc_soh_valid) begin
-                remaining_capacity <= soc_soh_prod / 32'd1000;
-            end
+            // remaining_capacity moved OUT of this block -- see
+            // remaining_capacity_calc near the end of this file. The divide by
+            // 1000 now runs on a sequential divider. Any assignment left here
+            // would create a second driver.
 
             // Internal resistance moved OUT of this block -- see the
             // internal_resistance_calc block near the end of this file. It now
@@ -323,7 +319,7 @@ module battery_predictive_ai_complete (
 
             // Estimate remaining range
             if (remaining_capacity > 16'd0) begin
-                estimated_range_km <= (remaining_capacity * 8'd90) / 16'd150;
+                estimated_range_km <= range_num / 18'd5;
             end
 
             // Charging safety check
@@ -425,6 +421,62 @@ module battery_predictive_ai_complete (
             soc_soh_valid <= sensor_valid[8] && sensor_valid[9];
         end
     end
+
+    // ======================================================================
+    // REMAINING CAPACITY, stage 2: divide by 1000 on a sequential divider.
+    //
+    // WHY: masked STA measured this path at 21.442 ns against a 10 ns clock,
+    // worst slack -11.905 ns across 16 endpoints -- the whole 16-bit result
+    // arriving one bit per nanosecond, which is the signature of a wide
+    // constant divider.
+    //
+    // The cause was widening the multiply to 32 bits to fix the overflow: a
+    // 32-bit divide-by-1000 is far deeper than the 16-bit one it replaced.
+    // The overflow fix was correct and necessary; the width cost was not
+    // accounted for. Moving the divide onto the sequential divider settles
+    // both -- full 32-bit precision, one bit per clock, 32 clocks total.
+    //
+    // remaining_capacity is a battery estimate that moves over minutes, so
+    // 320 ns of latency at 100 MHz is immaterial.
+    // ======================================================================
+    wire [31:0] cap_quot;
+    wire        cap_busy;
+    wire        cap_done;
+
+    seq_divider #(.WIDTH(32)) u_div_cap (
+        .clk       (clk_ai),
+        .rst_n     (rst_ai_n),
+        .start     (soc_soh_valid && !cap_busy),
+        .dividend  (soc_soh_prod),
+        .divisor   (32'd1000),
+        .quotient  (cap_quot),
+        .remainder (),
+        .busy      (cap_busy),
+        .done      (cap_done)
+    );
+
+    // SOLE driver of remaining_capacity.
+    always @(posedge clk_ai or negedge rst_ai_n) begin : remaining_capacity_calc
+        if (!rst_ai_n)     remaining_capacity <= 16'd0;
+        else if (cap_done) remaining_capacity <= cap_quot[15:0];
+    end
+
+    // ======================================================================
+    // ESTIMATED RANGE -- SECOND OVERFLOW, EXPOSED BY FIXING THE FIRST.
+    //
+    //   original:  estimated_range_km <= (remaining_capacity * 8'd90) / 16'd150;
+    //
+    // Verilog sizes that to the 16-bit left-hand side. While remaining_capacity
+    // was wrongly reading 16, the product 1,440 fit and nobody noticed. Now
+    // that it correctly reads up to 1000, the product is 90,000 -- which wraps
+    // in 16 bits to 24,464 and yields 163 km instead of 600 km.
+    //
+    // 90/150 reduces exactly to 3/5, and floor(90x/150) == floor(3x/5) for all
+    // integers, so this is arithmetically identical to what was intended.
+    // Keeping the ratio reduced holds the dividend under 3000 -- 12 bits
+    // instead of 17 -- so the divide is also much cheaper than widening to 32.
+    // ======================================================================
+    wire [17:0] range_num = {2'b00, remaining_capacity} * 18'd3;
 
     // ======================================================================
     // INTERNAL RESISTANCE,  R = dV / I,  on a sequential divider.
