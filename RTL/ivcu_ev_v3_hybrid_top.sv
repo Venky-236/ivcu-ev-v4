@@ -286,7 +286,7 @@ module ivcu_ev_v3_hybrid_top (
     output wire        fault_log_wr_en,
     output wire [9:0]  fault_log_addr,
     output wire [31:0] fault_log_data,
-    output wire [31:0] fault_log_rd_data,
+    input  wire [31:0] fault_log_rd_data,
 
     // Debug Interface
     input  wire [2:0]  debug_mode,
@@ -304,7 +304,6 @@ module ivcu_ev_v3_hybrid_top (
     wire clk_ai, clk_aon, clk_sensor, clk_mcu;
     wire rst_ai_n, rst_aon_n, rst_sensor_n, rst_mcu_n;
     wire pll_locked;
-    wire [3:0] clk_valid_status;
     wire [1:0] current_mode_aon;
     wire mode_valid, mode_stable;
     wire [41:0] sensor_map_car, sensor_map_bike;
@@ -348,6 +347,21 @@ module ivcu_ev_v3_hybrid_top (
     wire emergency_active;
     wire [7:0] emergency_severity;
 
+    // FIX: hazard_lights/door_unlock/airbag_control were each wired to BOTH
+    // central_safety_fsm_v3 AND emergency_response_system's outputs of the same name,
+    // i.e. two active drivers on one net. Split into per-source wires and OR-combine
+    // below (fail-safe: either FSM asserting the signal is enough to activate it).
+    wire hazard_lights_fsm,  hazard_lights_emerg;
+    wire door_unlock_fsm,    door_unlock_emerg;
+    wire airbag_control_fsm, airbag_control_emerg;
+
+    // FIX: fault_logger_sram_32kb.rd_data (an output) was wired directly to the top-level
+    // fault_log_rd_data INPUT port - illegal (an internal output cannot drive a chip input).
+    // The on-chip fault logger's read data now flows through this internal wire instead;
+    // the fault_log_rd_data top-level input stays declared (SDC-constrained) but unused
+    // internally, reserved for a future external fault-log memory if one is ever added.
+    wire [31:0] fault_log_rd_data_int;
+
     // ADC interface outputs (first 12 channels)
     wire [31:0] digital_out_0,  digital_out_1,  digital_out_2,  digital_out_3,  digital_out_4;
     wire [31:0] digital_out_5,  digital_out_6,  digital_out_7,  digital_out_8,  digital_out_9;
@@ -358,32 +372,7 @@ module ivcu_ev_v3_hybrid_top (
 
     // FIX: sync_cell now accepts WIDTH parameter because sync_cell.sv is parameterised.
     //      No defparam is used anywhere - parameter override is done in the #() style.
-    // Population count of sensor_fault, used by system_health_ai_complete's
-    // maintenance_required (>10 threshold) and predicted_failures. Previously
-    // wired to |sensor_fault (a 1-bit OR-reduction, auto zero-extended to 8
-    // bits), which could only ever be 0 or 1 and could never cross the >10
-    // threshold.
-    function [7:0] popcount42;
-        input [41:0] bus;
-        integer k;
-        begin
-            popcount42 = 8'd0;
-            for (k = 0; k < 42; k = k + 1)
-                popcount42 = popcount42 + bus[k];
-        end
-    endfunction
     wire [1:0] current_mode_ai_sync;
-    // hazard_lights / door_unlock / airbag_control are each driven by BOTH
-    // central_safety_fsm_v3 and emergency_response_system in the original
-    // wiring, which is an electrical short (confirmed by Yosys flatten:
-    // "multiple conflicting drivers"). Give each FSM its own wire and
-    // OR-combine them onto the real top-level output - either system
-    // asserting the signal should activate it (fail-safe).
-    wire safety_hazard_lights, safety_door_unlock, safety_airbag_control;
-    wire emergency_hazard_lights, emergency_door_unlock, emergency_airbag_control;
-    assign hazard_lights  = safety_hazard_lights  | emergency_hazard_lights;
-    assign door_unlock    = safety_door_unlock    | emergency_door_unlock;
-    assign airbag_control = safety_airbag_control | emergency_airbag_control;
     sync_cell #(.WIDTH(2)) u_sync_mode_ai (
         .clk_dst   (clk_ai),
         .rst_dst_n (rst_ai_n),
@@ -391,21 +380,14 @@ module ivcu_ev_v3_hybrid_top (
         .signal_dst(current_mode_ai_sync)
     );
 
-    // Sensor-domain synchronizers for mode / mode_valid, needed to drive
-    // sensor_enable_logic (which runs on clk_sensor).
+    // FIX: sensor_enable_logic (clk_sensor domain) needs current_mode synchronized into the
+    // sensor clock domain. This synchronizer was missing - see u_sensor_enable_logic below.
     wire [1:0] current_mode_sensor_sync;
-    wire       mode_valid_sensor_sync;
     sync_cell #(.WIDTH(2)) u_sync_mode_sensor (
         .clk_dst   (clk_sensor),
         .rst_dst_n (rst_sensor_n),
         .signal_src(current_mode_aon),
         .signal_dst(current_mode_sensor_sync)
-    );
-    sync_cell #(.WIDTH(1)) u_sync_mode_valid_sensor (
-        .clk_dst   (clk_sensor),
-        .rst_dst_n (rst_sensor_n),
-        .signal_src(mode_valid),
-        .signal_dst(mode_valid_sensor_sync)
     );
 
     // Build raw arrays for sensor interface fabric from digital inputs
@@ -498,6 +480,21 @@ module ivcu_ev_v3_hybrid_top (
     assign valid_array[40] = sensor_digital_valid_40;
     assign valid_array[41] = sensor_digital_valid_41;
 
+    // FIX: sensor_fault_count was fed |sensor_fault (a 1-bit "any fault?" flag, silently
+    // zero-extended into the 8-bit port by the tool) instead of an actual count. This made
+    // system_health_ai_complete's "sensor_fault_count > 10" maintenance check unreachable and
+    // skewed predicted_failures. Real bit population count added below.
+    function [7:0] popcount42;
+        input [41:0] bits;
+        integer k;
+        begin
+            popcount42 = 8'd0;
+            for (k = 0; k < 42; k = k + 1)
+                popcount42 = popcount42 + {7'd0, bits[k]};
+        end
+    endfunction
+    wire [7:0] sensor_fault_count_w = popcount42(sensor_fault);
+
     // ==================== INSTANTIATIONS ====================
 
     // 1. Clock and Reset Management
@@ -514,7 +511,9 @@ module ivcu_ev_v3_hybrid_top (
         .clk_sensor_out       (clk_sensor),
         .clk_mcu_out          (clk_mcu),
         .pll_locked           (pll_locked),
-        .clk_valid            (clk_valid_status),
+        .clk_valid            (),   // FIX: was wrongly wired to {rst_ai_n,rst_aon_n,rst_sensor_n,rst_mcu_n},
+                                     // creating a second driver on the reset nets that fights reset_sync_v3
+                                     // (the real, intended reset source). clk_valid isn't consumed elsewhere.
         .scan_enable          (scan_enable),
         .test_clk             (1'b0)
     );
@@ -579,6 +578,27 @@ module ivcu_ev_v3_hybrid_top (
         .auto_detect_active ()
     );
     assign active_mode = current_mode_aon;
+
+    // 4b. Sensor Enable Logic - FIX: this module existed in the file set but was never
+    // instantiated, leaving sensor_enable (top-level output, and the identical internal
+    // signal consumed by u_sensor_fabric / u_sensor_grace below) completely undriven. An
+    // undriven sensor_enable defaults to all-zero, which gates OFF every one of the 42
+    // channels in sensor_interface_fabric_complete's generate loop - i.e. no sensor data
+    // would ever reach any AI block. sensor_force_disable and debug_enable have no dedicated
+    // top-level ports yet, so they are tied off here (no forced disables, debug override off).
+    sensor_enable_logic u_sensor_enable_logic (
+        .clk_sensor           (clk_sensor),
+        .rst_sensor_n         (rst_sensor_n),
+        .current_mode         (current_mode_sensor_sync),
+        .mode_valid           (mode_valid),
+        .sensor_map_car       (sensor_map_car),
+        .sensor_map_bike      (sensor_map_bike),
+        .sensor_fault         (sensor_fault),
+        .sensor_grace_expired (sensor_grace_expired),
+        .sensor_force_disable (42'd0),
+        .sensor_enable        (sensor_enable),
+        .debug_enable         (1'b0)
+    );
 
     // 5. ADC Interface - connects 42 analog inputs to 12 digital outputs
     adc_interface_14nm u_adc_interface (
@@ -699,7 +719,9 @@ module ivcu_ev_v3_hybrid_top (
     );
 
     // 6. Sensor Interface Fabric
-    sensor_interface_fabric_complete u_sensor_fabric (
+    sensor_interface_fabric_complete #(
+        .MOVING_AVG_DEPTH (4)   // power of two only. was .moving_average_depth(4'd4)
+    ) u_sensor_fabric (
         .clk_sensor          (clk_sensor),
         .rst_sensor_n        (rst_sensor_n),
         .sensor_raw_in_0     (digital_out_0),
@@ -834,7 +856,6 @@ module ivcu_ev_v3_hybrid_top (
         .sensor_accuracy_41  (sensor_accuracy[41]),
         .sensor_calibrated   (sensor_calibrated),
         .filter_coefficients (16'd256),
-        .moving_average_depth(4'd4),
         .deadband_threshold  (16'd5),
         .debug_mode          (debug_mode)
     );
@@ -928,23 +949,6 @@ module ivcu_ev_v3_hybrid_top (
         .sensor_fault       (sensor_fault),
         .validation_timeout (32'd1000),
         .hysteresis_threshold(16'd10)
-    );
-
-    // 8b. Sensor Enable Logic - drives the sensor_enable bus consumed by the
-    //     fabric and grace manager above (previously omitted, leaving
-    //     sensor_enable permanently undriven/floating)
-    sensor_enable_logic u_sensor_enable (
-        .clk_sensor          (clk_sensor),
-        .rst_sensor_n        (rst_sensor_n),
-        .current_mode        (current_mode_sensor_sync),
-        .mode_valid          (mode_valid_sensor_sync),
-        .sensor_map_car      (sensor_map_car),
-        .sensor_map_bike     (sensor_map_bike),
-        .sensor_fault        (sensor_fault),
-        .sensor_grace_expired(sensor_grace_expired),
-        .sensor_force_disable(42'd0),
-        .sensor_enable       (sensor_enable),
-        .debug_enable        (1'b0)
     );
 
     // 9. AI Modules
@@ -1077,12 +1081,10 @@ module ivcu_ev_v3_hybrid_top (
                                  (motor_score > 8'd50) ? 4'd1 :
                                  (motor_score > 8'd20) ? 4'd2 : 4'd3;
 
-    // motor AI has no dedicated status output; derive one from motor_score so
-    // central_safety_fsm_v3.motor_status and system_health_ai.motor_status are
-    // never left floating.
+    // FIX: motor_status was declared but never driven - see u_central_fsm / u_system_health inputs below.
     assign motor_status = (motor_score >= 8'd80) ? `STATUS_OK :
-                          (motor_score >= 8'd50) ? `STATUS_WARNING :
-                          (motor_score >= 8'd20) ? `STATUS_CRITICAL : `STATUS_EMERGENCY;
+                           (motor_score >= 8'd50) ? `STATUS_WARNING :
+                           (motor_score >= 8'd20) ? `STATUS_CRITICAL : `STATUS_FAULT;
 
     vehicle_dynamics_predictive_complete u_dynamics_ai (
         .clk_ai           (clk_ai),
@@ -1162,7 +1164,7 @@ module ivcu_ev_v3_hybrid_top (
         .dynamics_status      (dynamics_status),
         .perception_status    (perception_status),
         .current_mode         (current_mode_ai_sync),
-        .sensor_fault_count   (popcount42(sensor_fault)),
+        .sensor_fault_count   (sensor_fault_count_w),
         .system_health_score  (system_health_score),
         .overall_status       (system_status_lo),
         .maintenance_required(),
@@ -1197,9 +1199,9 @@ module ivcu_ev_v3_hybrid_top (
         .motor_enable     (motor_enable),
         .brake_control    (brake_control),
         .throttle_limit   (throttle_limit),
-        .hazard_lights    (safety_hazard_lights),
-        .door_unlock      (safety_door_unlock),
-        .airbag_control   (safety_airbag_control),
+        .hazard_lights    (hazard_lights_fsm),
+        .door_unlock      (door_unlock_fsm),
+        .airbag_control   (airbag_control_fsm),
         .emergency_ack    (emergency_ack),
         .alert_level      (alert_level),
         .control_signals  (control_signals),
@@ -1269,14 +1271,22 @@ module ivcu_ev_v3_hybrid_top (
         .emergency_stop   (emergency_stop),
         .system_status    (system_status),
         .alert_level      (alert_level),
-        .hazard_lights    (emergency_hazard_lights),
-        .door_unlock      (emergency_door_unlock),
-        .airbag_control   (emergency_airbag_control),
+        .hazard_lights    (hazard_lights_emerg),
+        .door_unlock      (door_unlock_emerg),
+        .airbag_control   (airbag_control_emerg),
+        .emergency_active (emergency_active),
         .emergency_severity(emergency_severity),
         .sos_signal       (),
         .location_data    (),
         .battery_backup_enable()
     );
+
+    // FIX: OR-combine central_safety_fsm_v3's and emergency_response_system's independent
+    // hazard_lights/door_unlock/airbag_control outputs onto the actual top-level ports
+    // (previously both drove the same net directly - a conflicting-driver bug).
+    assign hazard_lights  = hazard_lights_fsm  | hazard_lights_emerg;
+    assign door_unlock    = door_unlock_fsm    | door_unlock_emerg;
+    assign airbag_control = airbag_control_fsm | airbag_control_emerg;
 
     // 14. Fault Logger
     fault_logger_sram_32kb u_fault_logger (
@@ -1287,7 +1297,7 @@ module ivcu_ev_v3_hybrid_top (
         .wr_data          (fault_log_data),
         .rd_en            (1'b0),
         .rd_addr          (10'd0),
-        .rd_data          (fault_log_rd_data),
+        .rd_data          (fault_log_rd_data_int),
         .fault_code       (fault_code[7:0]),
         .timestamp        (32'd0),
         .sensor_data_0    (sensor_data[0]),
@@ -1416,7 +1426,7 @@ module ivcu_ev_v3_hybrid_top (
         .write_enable     (fault_log_wr_en),
         .write_addr       (fault_log_addr),
         .write_data       (fault_log_data),
-        .read_data        (fault_log_rd_data),
+        .read_data        (fault_log_rd_data_int),
         .debug_mode       (debug_mode),
         .debug_data       (debug_data_out),
         .debug_valid      (debug_valid)

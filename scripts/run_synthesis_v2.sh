@@ -54,6 +54,10 @@ cat > "$YS" <<EOF
 # guarded logic silently vanishes and outputs end up undriven.
 read_verilog -sv -DSYNTHESIS $RTL/defines_ivcu_ev_v3.sv
 
+# Sequential divider. Used by battery_predictive_ai and perception_health_ai,
+# so it MUST be read before them or hierarchy -check reports an unknown module.
+read_verilog $RTL/seq_divider.v
+
 read_verilog -sv -DSYNTHESIS $RTL/ivcu_ev_v3_hybrid_top.sv
 read_verilog -sv -DSYNTHESIS $RTL/sync_cell.sv
 read_verilog $RTL/clock_manager_14nm.v

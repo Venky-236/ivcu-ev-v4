@@ -1,6 +1,6 @@
 // perception_health_ai_complete.v
 `timescale 1ns/1ps
-`include "defines_ivcu_ev_v3.sv"
+`include "defines_ivcu_ev_v3.sv"   // FIX: file is defines_ivcu_ev_v3.sv, .v version never existed
 
 module perception_health_ai_complete (
     input  wire        clk_ai,
@@ -110,36 +110,21 @@ module perception_health_ai_complete (
     reg [7:0]  tire_health [0:3];
 
     // Temporary variables for always blocks (declared at module level)
-    //
-    // FIX (multiple-driver): this comment describes the bug. `i` was written
-    // from five clocked blocks and `confidence_scaled` from two, so each block
-    // inferred its own flip-flop and they all drove the same net -- Yosys
-    // `check` reported "multiple conflicting drivers for .\i" and
-    // ".\confidence_scaled". Both are now declared inside the blocks that use
-    // them, which Verilog-2001 permits for a labelled begin/end. All blocks in
-    // this file were already labelled, so no relabelling was needed.
-    //
-    // The temporaries left below are each written by exactly ONE block, so they
-    // do not conflict today. Ownership is annotated so it stays that way.
-    reg all_same;                       // (moved into ultrasonic_ai)
-    reg [3:0] radar_confidence_val;     // radar_ai only
-    reg [11:0] radar_distance;          // radar_ai only
-    reg [3:0] lidar_confidence_val;     // lidar_ai only
-    reg [11:0] lidar_distance;          // lidar_ai only
-    reg [7:0] camera_confidence_val;    // camera_ai only
-    reg [7:0] object_count;             // camera_ai only
-    reg [7:0] individual_scores [0:3];  // tpms_ai only
+    reg all_same;
+    reg [3:0] radar_confidence_val;
+    reg [11:0] radar_distance;
+    reg [3:0] lidar_confidence_val;
+    reg [11:0] lidar_distance;
+    reg [7:0] camera_confidence_val;
+    reg [7:0] object_count;
+    reg [7:0] individual_scores [0:3];
     reg [7:0] avg_pressure_score;
-    reg [7:0] pressure_diff_score;      // tpms_ai only
-    reg [15:0] avg_pressure;            // tpms_ai only
-    reg [15:0] max_diff;                // tpms_ai only
-    reg [15:0] diff;                    // tpms_ai only
+    reg [7:0] pressure_diff_score;
+    reg [15:0] avg_pressure;
+    reg [15:0] max_diff;
+    reg [15:0] diff;
     reg [15:0] accel_change;
     reg [15:0] gyro_change;
-    integer j;  // for loops -- tpms_ai only, does not conflict
-
-    // NOTE: `integer i;` and `reg [7:0] confidence_scaled;` used to live here.
-    // Removed -- see FIX note above.
 
     // ==================== ULTRASONIC SENSOR AI =========
     always @(posedge clk_ai or negedge rst_ai_n) begin : ultrasonic_ai
@@ -229,14 +214,15 @@ module perception_health_ai_complete (
         if (!rst_ai_n) begin
             radar_score <= 8'd100;
             radar_fault_counter <= 8'd0;
-            // No dedicated right-side sensor channel exists in this design;
-            // tie off rather than leave floating/undriven.
-            blind_spot_right_active <= 1'b0;
             for (i = 0; i < 8; i = i + 1) radar_history[i] <= 16'd0;
             radar_ptr <= 3'd0;
             sensor_confidence_2 <= 8'd100;
             object_distance <= 16'd0;
             object_relative_speed <= 16'd0;
+            // FIX: was never driven anywhere (floating reg). This module has only one radar
+            // input, so there is no real right-side channel to compute this from yet - tied
+            // off to 0 (known coverage gap: only left-side blind-spot detection exists today).
+            blind_spot_right_active <= 1'b0;
         end else if (sensor_valid[2]) begin
             radar_confidence_val = radar[15:12];
             radar_distance = radar[11:0];
@@ -346,6 +332,7 @@ module perception_health_ai_complete (
     // ==================== TPMS SENSOR AI ===============
     always @(posedge clk_ai or negedge rst_ai_n) begin : tpms_ai
         integer i;
+        integer j;
         if (!rst_ai_n) begin
             tpms_score <= 8'd100;
             tpms_fault_counter <= 8'd0;
@@ -365,7 +352,7 @@ module perception_health_ai_complete (
                 if ((tire_pressure[j] < TPMS_MIN_PRESSURE) || (tire_pressure[j] > TPMS_MAX_PRESSURE)) begin
                     individual_scores[j] = 8'd0;
                     tire_health[j] <= 8'd0;
-                end else if ((tire_pressure[j] < (TPMS_MIN_PRESSURE + TPMS_WARNING_DIFF)) ||
+                end else if ((tire_pressure[j] < (TPMS_MIN_PRESSURE + TPMS_WARNING_DIFF)) || 
                            (tire_pressure[j] > (TPMS_MAX_PRESSURE - TPMS_WARNING_DIFF))) begin
                     individual_scores[j] = 8'd50;
                     tire_health[j] <= 8'd50;
@@ -375,7 +362,7 @@ module perception_health_ai_complete (
                 end
             end
 
-            avg_pressure = (tire_pressure[0] + tire_pressure[1] +
+            avg_pressure = (tire_pressure[0] + tire_pressure[1] + 
                            tire_pressure[2] + tire_pressure[3]) / 16'd4;
 
             max_diff = 16'd0;
@@ -389,8 +376,8 @@ module perception_health_ai_complete (
             else if (max_diff > TPMS_WARNING_DIFF) pressure_diff_score = 8'd50;
             else pressure_diff_score = 8'd100;
 
-            tpms_score <= (individual_scores[0] + individual_scores[1] +
-                          individual_scores[2] + individual_scores[3] +
+            tpms_score <= (individual_scores[0] + individual_scores[1] + 
+                          individual_scores[2] + individual_scores[3] + 
                           pressure_diff_score) / 8'd5;
 
             sensor_confidence_5 <= tpms_score;
@@ -411,14 +398,15 @@ module perception_health_ai_complete (
     // ==================== COLLISION DETECTION ==========
     always @(posedge clk_ai or negedge rst_ai_n) begin : collision_detect
         if (!rst_ai_n) begin
-            time_to_collision <= 16'd0;
             collision_warning <= 1'b0;
             blind_spot_warning <= 1'b0;
             lane_departure <= 1'b0;
         end else begin
-            if ((object_distance > 16'd0) && (object_relative_speed > 16'd0))
-                time_to_collision <= (object_distance * 16'd10) / object_relative_speed;
-            else time_to_collision <= 16'd0;
+            // time_to_collision moved OUT of this block -- see the ttc_calc
+            // block near the end of this file. It now runs on a sequential
+            // divider. Any assignment left here would create a second driver.
+            // collision_warning below still reads time_to_collision exactly as
+            // before: non-blocking, so it sees the previous cycle's value.
             if ((time_to_collision > 16'd0) && (time_to_collision < COLLISION_IMMINENT))
                 collision_warning <= 1'b1;
             else if ((time_to_collision > 16'd0) && (time_to_collision < COLLISION_WARNING))
@@ -436,11 +424,11 @@ module perception_health_ai_complete (
             perception_status <= `STATUS_OK;
             perception_ok <= 1'b1;
         end else begin
-            perception_score <= (ultrasonic_score * 8'd1 +
-                                camera_score * 8'd3 +
-                                radar_score * 8'd3 +
-                                lidar_score * 8'd2 +
-                                gps_score * 8'd1 +
+            perception_score <= (ultrasonic_score * 8'd1 + 
+                                camera_score * 8'd3 + 
+                                radar_score * 8'd3 + 
+                                lidar_score * 8'd2 + 
+                                gps_score * 8'd1 + 
                                 tpms_score * 8'd1) / 8'd11;
 
             if (perception_score >= 8'd80) begin
@@ -467,6 +455,47 @@ module perception_health_ai_complete (
                 perception_ok <= 1'b0;
             end
         end
+    end
+
+    // ======================================================================
+    // TIME TO COLLISION = distance / closing speed, on a sequential divider.
+    //
+    // Was fully combinational: 30.542 ns arrival against a 10 ns clock, worst
+    // slack -20.936 ns. object_relative_speed is a genuine runtime value, so
+    // unlike the sensor fabric there is no shift trick available.
+    //
+    // Latency is now 32 clocks = 320 ns at 100 MHz. A vehicle closing at
+    // 30 m/s travels 0.01 mm in that time.
+    //
+    // The !ttc_cond branch reproduces the original `else time_to_collision <=
+    // 16'd0;` so behaviour with no valid object in front is unchanged.
+    // ======================================================================
+    wire [31:0] ttc_num  = {16'd0, object_distance} * 32'd10;
+    wire [31:0] ttc_den  = {16'd0, object_relative_speed};
+    wire        ttc_cond = (object_distance       > 16'd0)
+                        && (object_relative_speed > 16'd0);
+
+    wire [31:0] ttc_quot;
+    wire        ttc_busy;
+    wire        ttc_done;
+
+    seq_divider #(.WIDTH(32)) u_div_ttc (
+        .clk       (clk_ai),
+        .rst_n     (rst_ai_n),
+        .start     (ttc_cond && !ttc_busy),
+        .dividend  (ttc_num),
+        .divisor   (ttc_den),
+        .quotient  (ttc_quot),
+        .remainder (),
+        .busy      (ttc_busy),
+        .done      (ttc_done)
+    );
+
+    // SOLE driver of time_to_collision.
+    always @(posedge clk_ai or negedge rst_ai_n) begin : ttc_calc
+        if (!rst_ai_n)      time_to_collision <= 16'd0;
+        else if (!ttc_cond) time_to_collision <= 16'd0;
+        else if (ttc_done)  time_to_collision <= ttc_quot[15:0];
     end
 
 endmodule

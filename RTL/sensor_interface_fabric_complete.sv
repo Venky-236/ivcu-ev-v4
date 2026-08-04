@@ -3,7 +3,13 @@
 `include "defines_ivcu_ev_v3.sv"
 `default_nettype none
 
-module sensor_interface_fabric_complete (
+module sensor_interface_fabric_complete #(
+    // Depth of the moving-average window. MUST be a power of two: 1,2,4,8,16.
+    // This was previously a PORT tied to the constant 4'd4 at the top level.
+    // Because synthesis never flattens, that constant never reached this module
+    // and Yosys built 42 general-purpose dividers instead of a shift.
+    parameter integer MOVING_AVG_DEPTH = 4
+) (
     input  wire        clk_sensor,
     input  wire        rst_sensor_n,
     input  wire [31:0] sensor_raw_in_0,
@@ -138,16 +144,25 @@ module sensor_interface_fabric_complete (
     output reg  [7:0]  sensor_accuracy_41,
     output wire [41:0] sensor_calibrated,
     input  wire [15:0] filter_coefficients,
-    input  wire [3:0]  moving_average_depth,
     input  wire [15:0] deadband_threshold,
     input  wire [2:0]  debug_mode
 );
 
+    // log2 of the window depth -- the shift that replaces the division.
+    localparam integer AVG_SHIFT = (MOVING_AVG_DEPTH <= 1) ? 0 :
+                                   (MOVING_AVG_DEPTH <= 2) ? 1 :
+                                   (MOVING_AVG_DEPTH <= 4) ? 2 :
+                                   (MOVING_AVG_DEPTH <= 8) ? 3 : 4;
+
+    // Depth-1 is an all-ones mask because the depth is a power of two, so the
+    // ring-buffer pointer wrap becomes an AND instead of a compare-and-select.
+    localparam [3:0] AVG_MASK = MOVING_AVG_DEPTH - 1;
+
     // Internal arrays for channel processing
-    wire [15:0] filtered_data [0:41];
-    wire [7:0]  acc [0:41];
-    wire [41:0] valid_int;
-    wire [41:0] filtered_valid_int;
+    wire [15:0] filtered_data [0:41];   // FIXED: was reg
+    wire [7:0]  acc [0:41];            // FIXED: was reg
+    wire [41:0] valid_int;             // FIXED: was reg
+    wire [41:0] filtered_valid_int;    // FIXED: was reg
 
     // Raw input array
     wire [31:0] raw_array [0:41];
@@ -204,6 +219,11 @@ module sensor_interface_fabric_complete (
             reg [15:0] data_filt;
             reg [7:0]  accuracy;
 
+            // Moving average = sum >> log2(depth), written as a bit-select.
+            // Wiring, not logic: zero gates. Replaces the 32-bit variable
+            // divider that measured ~130 levels and 39.2 ns.
+            wire [15:0] avg_now = sum[AVG_SHIFT +: 16];
+
             always @(posedge clk_sensor or negedge rst_sensor_n) begin
                 if (!rst_sensor_n) begin
                     for (int j = 0; j < 16; j++) mem[j] <= 16'd0;
@@ -214,18 +234,26 @@ module sensor_interface_fabric_complete (
                     accuracy <= 8'd0;
                 end else if (sensor_raw_valid[i] && sensor_enable[i]) begin
                     data_raw <= raw_array[i][15:0];
-                    sum <= sum - mem[ptr] + raw_array[i][15:0];
+                    sum      <= sum - mem[ptr] + raw_array[i][15:0];
                     mem[ptr] <= raw_array[i][15:0];
-                    ptr <= (ptr == moving_average_depth - 1) ? 4'd0 : ptr + 1;
-                    if (moving_average_depth > 0)
-                        data_filt <= sum / moving_average_depth;
-                    else
-                        data_filt <= data_raw;
-                    // Deadband
-                    if (data_filt > deadband_threshold)
-                        data_filt <= data_filt - deadband_threshold;
-                    // Accuracy (simplified: 90% if valid)
-                    accuracy <= 8'd90;
+
+                    // Power-of-two depth, so the wrap is a mask, not a compare.
+                    ptr      <= (ptr + 4'd1) & AVG_MASK;
+
+                    // FUNCTIONAL FIX.
+                    // The old code assigned data_filt TWICE with non-blocking
+                    // assignments in the same block. The second won, so the
+                    // average was computed then silently discarded, and the
+                    // threshold was subtracted from the PREVIOUS cycle's output.
+                    // Whenever the deadband was active the output walked itself
+                    // downward with the sensor data playing no part at all.
+                    // Now: one branch, one assignment, deadband applied to the
+                    // average computed this cycle.
+                    data_filt <= (avg_now > deadband_threshold)
+                                 ? (avg_now - deadband_threshold)
+                                 : avg_now;
+
+                    accuracy  <= 8'd90;
                 end else begin
                     data_filt <= 16'd0;
                     accuracy <= 8'd0;
@@ -331,8 +359,7 @@ module sensor_interface_fabric_complete (
         sensor_filtered_valid <= filtered_valid_int;
     end
 
-    // FIX: 42-bit all-ones = 42'h3FFFFFFFFFF
-    assign sensor_calibrated = 42'h3FFFFFFFFFF;
+    assign sensor_calibrated = 42'h3FFFFFFFFFF;   // FIXED: was reg, now wire
 
 endmodule
 `default_nettype wire
