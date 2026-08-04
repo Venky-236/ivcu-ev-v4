@@ -3,3 +3,4 @@ qc/
 libs/
 lef/
 *.log
+RTL_backup_*/
