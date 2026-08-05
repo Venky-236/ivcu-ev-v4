@@ -261,7 +261,8 @@ set_input_delay -clock clk_200mhz_mcu -min 0.0 $mcu_s_in
 set mcu_m_in [get_ports {m_axi_awready m_axi_wready  \
                          m_axi_bvalid  m_axi_bresp   \
                          m_axi_arready \
-                         m_axi_rvalid  m_axi_rdata   m_axi_rresp}]
+                         m_axi_rvalid  m_axi_rdata   m_axi_rresp \
+                         fault_log_rd_data}]
 
 set_input_delay -clock clk_200mhz_mcu -max 1.8 $mcu_m_in
 set_input_delay -clock clk_200mhz_mcu -min 0.0 $mcu_m_in
@@ -285,7 +286,6 @@ set_output_delay -clock clk_200mhz_mcu -min 0.5 $mcu_m_out
 
 
 set mcu_dbg_out [get_ports {fault_log_wr_en fault_log_addr fault_log_data \
-                            fault_log_rd_data \
                             debug_data_out debug_valid}]
 
 set_output_delay -clock clk_200mhz_mcu -max 2.2 $mcu_dbg_out
