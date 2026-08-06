@@ -4,3 +4,5 @@ libs/
 lef/
 *.log
 RTL_backup_*/
+pnr_out/
+*:Zone.Identifier
