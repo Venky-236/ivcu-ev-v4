@@ -6,3 +6,5 @@ lef/
 RTL_backup_*/
 pnr_out/
 *:Zone.Identifier
+pnr_out/
+*:Zone.Identifier
