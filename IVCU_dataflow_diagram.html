@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IVCU-EV V3 — dataflow, 42 sensors to top level</title>
+<style>
+  :root{
+    --bg:#0f1117; --panel:#171a23; --line:#2a2f3d; --txt:#e6e8ee; --dim:#9aa3b5;
+    --aon:#d97706; --sensor:#0d9488; --ai:#5b5bd6; --mcu:#e11d48;
+    --infra:#64748b; --bus:#a78bfa; --dead:#4b5563; --macro:#0891b2;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--txt);
+       font:14px/1.55 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+  header{padding:22px 26px 14px;border-bottom:1px solid var(--line)}
+  h1{margin:0 0 4px;font-size:20px;font-weight:650;letter-spacing:-.01em}
+  .sub{color:var(--dim);font-size:13px}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;font-size:12.5px}
+  .legend span{display:flex;align-items:center;gap:7px;color:var(--dim)}
+  .sw{width:12px;height:12px;border-radius:3px;display:inline-block}
+  .wrap{display:flex;gap:0;align-items:flex-start}
+  .canvas{flex:1;min-width:0;overflow:auto;padding:10px 0 30px}
+  svg{display:block;min-width:1480px}
+  .node rect{stroke-width:1.5;rx:7;cursor:pointer;transition:filter .12s}
+  .node:hover rect{filter:brightness(1.35)}
+  .node text{pointer-events:none;font-size:11.5px;fill:var(--txt)}
+  .node .t1{font-weight:650;font-size:12px}
+  .node .t2{fill:var(--dim);font-size:10.5px}
+  .edge{fill:none;stroke:#3a4152;stroke-width:1.6}
+  .edge.wide{stroke:var(--bus);stroke-width:3.2}
+  .edge.dead{stroke:var(--dead);stroke-dasharray:5 4}
+  .elabel{font-size:10px;fill:#7b8598}
+  .band{fill:none;stroke:#232837;stroke-width:1;stroke-dasharray:3 5}
+  .bandlab{font-size:10.5px;fill:#5a6377;letter-spacing:.08em}
+  aside{width:340px;flex:none;border-left:1px solid var(--line);
+        background:var(--panel);padding:20px;height:calc(100vh - 132px);
+        overflow:auto;position:sticky;top:0}
+  aside h2{margin:0 0 3px;font-size:15px}
+  .tag{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:20px;
+       margin:6px 6px 10px 0;font-weight:600}
+  aside dl{margin:14px 0 0;font-size:12.5px}
+  aside dt{color:var(--dim);font-size:10.5px;text-transform:uppercase;
+           letter-spacing:.07em;margin-top:12px}
+  aside dd{margin:3px 0 0}
+  code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:#c4b5fd}
+  .hint{color:var(--dim);font-size:12.5px}
+  table{border-collapse:collapse;width:100%;margin-top:8px;font-size:12px}
+  th,td{text-align:left;padding:4px 6px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:600;font-size:10.5px;text-transform:uppercase}
+  .bar{height:7px;border-radius:4px;background:var(--ai)}
+  footer{padding:16px 26px 40px;color:var(--dim);font-size:12px;
+         border-top:1px solid var(--line)}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>IVCU-EV V3 — from 42 sensors to the top level</h1>
+  <div class="sub">Every box is a real module instance. Areas and cell counts from
+    <code>synth_full_20260804_160929.log</code>. Click any box for its details.</div>
+  <div class="legend">
+    <span><i class="sw" style="background:var(--sensor)"></i>clk_sensor · 50 MHz</span>
+    <span><i class="sw" style="background:var(--ai)"></i>clk_ai · 100 MHz</span>
+    <span><i class="sw" style="background:var(--aon)"></i>clk_aon · 10 MHz · always on</span>
+    <span><i class="sw" style="background:var(--mcu)"></i>clk_mcu · 200 MHz</span>
+    <span><i class="sw" style="background:var(--infra)"></i>infrastructure</span>
+    <span><i class="sw" style="background:var(--macro)"></i>SRAM macro</span>
+    <span><i class="sw" style="background:var(--dead)"></i>unconnected / discarded</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="canvas"><svg id="svg" viewBox="0 0 1480 1010"></svg></div>
+  <aside id="panel">
+    <h2>Click a block</h2>
+    <p class="hint">Every box carries its real cell count, area and clock domain.
+       Dashed grey arrows are paths that exist in the port list but carry data
+       nothing reads.</p>
+    <dt style="color:var(--dim);font-size:10.5px;text-transform:uppercase;letter-spacing:.07em">Area concentration</dt>
+    <table id="areatab"></table>
+  </aside>
+</div>
+
+<footer>
+  The spine of the design is <code>sensor_data[0..41]</code> — 42 × 16 bits =
+  672 wires. Every AI block, the fault logger and the MCU interface all read
+  from that one array. It crosses from <code>clk_sensor</code> into
+  <code>clk_ai</code>, <code>clk_aon</code> and <code>clk_mcu</code> with no
+  synchroniser.
+</footer>
+
+<script>
+const DOM = {sensor:'--sensor', ai:'--ai', aon:'--aon', mcu:'--mcu',
+             infra:'--infra', macro:'--macro', dead:'--dead', bus:'--bus'};
+const cv = k => getComputedStyle(document.documentElement).getPropertyValue(DOM[k]).trim();
+
+const N = {
+ // ---- pins ----
+ pin_adc  :{x:16, y:70, w:168,h:56, dom:'sensor', t1:'sensor_adc_in_0..11',
+            t2:'144 b + 12 valid · analog',
+            d:{Role:'The 12 analog channels that are actually converted.',
+               Bits:'12 ports × 12 bits + 12 valid = 156 pins',
+               Clock:'constrained to clk_50mhz_sensor, input delay max 7.0 ns',
+               Goes:'u_adc_interface'}},
+ pin_dead :{x:16, y:136,w:168,h:56, dom:'dead',   t1:'sensor_adc_in_12..41',
+            t2:'360 b + 30 valid · DISCARDED',
+            d:{Role:'Accepted at the boundary and dropped.',
+               Why:'adc_interface_14nm declares only 12 digital outputs. Its own source says: "ADCs 12-41 are ignored because we have only 12 outputs."',
+               Cost:'390 package pins carrying data the silicon never uses',
+               Fix:'either give the ADC 42 outputs, or delete 30 port groups'}},
+ pin_dig  :{x:16, y:206,w:168,h:60, dom:'sensor', t1:'sensor_digital_in_0..41',
+            t2:'1344 b + 42 valid',
+            d:{Role:'Channels 12-41 enter here already digital and bypass the ADC entirely.',
+               Note:'The fabric reads only [15:0] of each 32-bit port, so the upper 16 bits of all 42 ports — 672 pins — have no load.',
+               Goes:'u_sensor_fabric (12-41 direct), valid bits to all 42 filters'}},
+ pin_mode :{x:16, y:290,w:168,h:52, dom:'aon',    t1:'mode / emergency',
+            t2:'car, bike, auto, override, e-stop',
+            d:{Ports:'mode_switch_car, mode_switch_bike, mode_auto_detect, user_mode_override[1:0], emergency_stop, manual_override',
+               Clock:'clk_10mhz_aon, input delay max 35.0 ns (35% of 100 ns)'}},
+ pin_axi  :{x:16, y:358,w:168,h:52, dom:'mcu',    t1:'s_axi + m_axi',
+            t2:'440 bits · AXI-Lite',
+            d:{Role:'Slave for an external MCU to read status; master for the chip to write out.',
+               Clock:'clk_200mhz_mcu, 5 ns — the tightest in the design',
+               Note:'64-bit data bus carrying 32-bit data. Bits [63:32] of s_axi_wdata are never read and of s_axi_rdata are constant 0.'}},
+ pin_clk  :{x:16, y:426,w:168,h:60, dom:'infra',  t1:'4 clocks + 2 resets',
+            t2:'por_n is the true master',
+            d:{Clocks:'clk_100mhz (10 ns), clk_10mhz_aon (100 ns), clk_50mhz_sensor (20 ns), clk_200mhz_mcu (5 ns)',
+               Resets:'por_n — every always block in reset_sync_v3 keys off it. ext_rst_n is a request combined in logic.',
+               SDC:'all four declared mutually asynchronous with set_clock_groups'}},
+ pin_pwr  :{x:16, y:502,w:168,h:56, dom:'aon',    t1:'vdd_core / io / ram',
+            t2:'LOGIC inputs, not supplies',
+            d:{Trap:'Despite the names these are ordinary logic signals — status flags from an external PMIC saying whether each rail is healthy.',
+               Real:'Actual supply arrives through the PDN as metal, not through pins.',
+               SDC:'correctly false-pathed'}},
+
+ // ---- sensor domain ----
+ adc      :{x:232,y:70, w:150,h:78, dom:'sensor', t1:'u_adc_interface',
+            t2:'7,947 cells · 62,111 µm²',
+            d:{Module:'adc_interface_14nm',
+               Does:'zero-extends each 12-bit reading to 32 bits, one registered stage',
+               Waste:'a calibration path with an offset add and a gain multiply is built, but calibration_enable is tied 1\'b0 at the top — the multiplier can never be used',
+               In:'42 analog channels', Out:'12 digital channels'}},
+ fabric   :{x:232,y:196,w:150,h:96, dom:'sensor', t1:'u_sensor_fabric',
+            t2:'23,603 cells · 244,062 µm² · 38.5%',
+            d:{Module:'sensor_interface_fabric_complete',
+               Does:'42 identical 4-deep moving-average filters, built by a generate loop',
+               Key:'avg = sum[AVG_SHIFT +: 16] — a bit select, pure wiring, zero gates. This is the fix that took the module from 819,661 µm² to 244,062.',
+               Because:'MOVING_AVG_DEPTH is a PARAMETER, so the constant 4 is inside the module before any gate is built',
+               Dead:'reg mem[0:15] per channel but only mem[0..3] used — 12 × 42 = 504 dead registers',
+               Biggest:'largest module in the design'}},
+ enable   :{x:232,y:326,w:150,h:56, dom:'sensor', t1:'u_sensor_enable_logic',
+            t2:'170 cells · 1,954 µm²',
+            d:{Does:'combines the mode map, fault flags and grace expiry into the 42-bit sensor_enable mask',
+               Loop:'this mask feeds back into the fabric and the grace manager — a genuine feedback loop inside the sensor domain',
+               History:'this module was once declared but never instantiated. With sensor_enable undriven it defaults to all-zero, gating off all 42 channels — no sensor data would reach anything.'}},
+ grace    :{x:232,y:398,w:150,h:78, dom:'sensor', t1:'u_sensor_grace',
+            t2:'12,898 cells · 105,193 µm² · 16.6%',
+            d:{Module:'sensor_grace_manager_complete',
+               Does:'42 independent 32-bit timers giving a failing sensor a grace period before it is declared dead',
+               FINDING:'grace_timeout is a PORT tied to 32\'d1000000 at the top level — not a parameter. Synthesis never flattens, so it builds 42 general 32-bit magnitude comparators instead of constant compares. This is exactly the bug that cost 575,000 µm² in the sensor fabric.',
+               Fix:'change grace_timeout and grace_period_count to parameters'}},
+ valid    :{x:232,y:492,w:150,h:60, dom:'sensor', t1:'u_sensor_validation',
+            t2:'1,184 cells · 7,219 µm²',
+            d:{Does:'range-checks each channel and produces the 42-bit sensor_fault',
+               Finding:'only ranges 0-9 have ports and all are tied to 0 and 0xFFFF at the top — no range is actually enforced',
+               Also:'validation_timeout and hysteresis_threshold are constants tied to ports'}},
+
+ // ---- spine ----
+ spine    :{x:430,y:70, w:104,h:300,dom:'bus',    t1:'sensor_data[0..41]',
+            t2:'42 × 16 b = 672 wires',
+            d:{Role:'THE SPINE OF THE DESIGN. Every AI block, the fault logger and the MCU interface all read from this one array.',
+               Width:'the widest interface in the chip — 672 wires leaving the sensor cluster',
+               CDC:'written on clk_sensor, read on clk_ai, clk_aon and clk_mcu, with NO synchroniser. set_clock_groups -asynchronous stops STA timing it, but not timing a path is not the same as making it safe.',
+               Hotspot:'sensor_data[16] (wheel speed) alone drives 8 separate module inputs',
+               Physical:'keep the sensor cluster and the AI cluster close — this bus is the reason'}},
+
+ // ---- AI blocks ----
+ batt     :{x:590,y:60, w:158,h:48, dom:'ai',   t1:'u_battery_ai',
+            t2:'4,808 cells · 40,121 µm²',
+            d:{Reads:'sensor_data 0,1,4,5,6,7,8,9,11,12',
+               Out:'battery_health_ok, battery_health_score, battery_status',
+               Contains:'a seq_divider (865 cells, 7,828 µm²) — a 32-cycle sequential divider added deliberately to keep division off the critical path',
+               Timing:'−0.902 ns on 3 endpoints, 48 minimum-size gates — resizer work'}},
+ thermal  :{x:590,y:118,w:158,h:48, dom:'ai',   t1:'u_thermal_ai',
+            t2:'614 cells · 5,797 µm²',
+            d:{Reads:'sensor_data 0,1,2,3,10,25,26,27,34',
+               Out:'thermal_ok, thermal_score, thermal_status, cooling_required → the cooling_control chip pin'}},
+ motor    :{x:590,y:176,w:158,h:48, dom:'ai',   t1:'u_motor_ai',
+            t2:'5,008 cells · 36,857 µm²',
+            d:{Reads:'sensor_data 2,3,6,8,10,14,15,16,17,18,19,20,33 plus sensor_digital_in_21[0]',
+               Reuse:'wheel_speed_front and _rear both read channel 16; motor_ and inverter_coolant both read 10; motor_ and inverter voltage both read 6; both tyre pressures read 33',
+               Out:'motor_health_score, motor_ok — 30 other outputs are unconnected'}},
+ dyn      :{x:590,y:234,w:158,h:48, dom:'ai',   t1:'u_dynamics_ai',
+            t2:'2,708 cells · 20,159 µm²',
+            d:{Reads:'sensor_data 14,15,16,22,23,24',
+               Out:'dynamics_ok, dynamics_score, dynamics_status'}},
+ percep   :{x:590,y:292,w:158,h:48, dom:'ai',   t1:'u_perception_ai',
+            t2:'1,796 cells · 18,426 µm²',
+            d:{Reads:'sensor_data 28,29,30,31,32,33 — ultrasonic, camera, radar, lidar, gps, tpms',
+               Contains:'the second seq_divider (865 cells, 7,828 µm²)',
+               Out:'perception_ok, perception_score, perception_status'}},
+ crash    :{x:590,y:350,w:158,h:48, dom:'aon',  t1:'u_crash_ai',
+            t2:'1,468 cells · 13,830 µm²',
+            d:{Clock:'clk_aon — NOT clk_ai',
+               Why:'crash detection must keep working when the AI domain is powered down. This is the one AI block on the always-on clock.',
+               Reads:'sensor_data 13,14,15 — crash impact, gyroscope, imu',
+               Out:'crash_latched → central FSM and emergency response'}},
+ adas     :{x:590,y:408,w:158,h:48, dom:'ai',   t1:'u_adas_controller',
+            t2:'24,719 µm²',
+            d:{Reads:'sensor_data 16,19,20,22,28,29,30,31,32',
+               Out:'adas_active, adas_confidence, cruise_control, lane_keep, auto_brake → motor control'}},
+ mctrl    :{x:590,y:466,w:158,h:48, dom:'ai',   t1:'u_motor_control',
+            t2:'47,933 µm²',
+            d:{Reads:'sensor_data 2,11,16,17,19,20 plus the ADAS commands',
+               FINDING:'its three outputs — torque_command, regen_command, steering_assist — are internal wires with no top-level port. The torque decision never leaves the chip.'}},
+ diag     :{x:590,y:524,w:158,h:52, dom:'dead', t1:'u_diagnostic',
+            t2:'118,908 µm² · NO OUTPUTS',
+            d:{Module:'diagnostic_report_generator',
+               FINDING:'look at the instantiation — there is not one output connection. Every output is absent or unconnected. Yet it survives synthesis at 118,908 µm², the third largest module, 18.8% of your standard-cell area.',
+               Why:'opt_clean kept it because Yosys treats its outputs as public',
+               Question:'this is the single biggest area question in the design. Answer it before the next synthesis run.'}},
+
+ // ---- aggregate ----
+ syshealth:{x:800,y:170,w:150,h:52, dom:'ai',   t1:'u_system_health',
+            t2:'392 cells · 3,406 µm²',
+            d:{Does:'combines the five AI scores and five statuses into system_health_score and overall_status',
+               Note:'sensor_fault_count is a real 42-bit population count, computed by a function at the top level. It was once fed |sensor_fault — a 1-bit any-fault flag silently zero-extended — which made the "faults > 10" maintenance check unreachable.'}},
+ fsm      :{x:800,y:300,w:150,h:62, dom:'aon',  t1:'u_central_fsm',
+            t2:'1,159 cells · 12,078 µm²',
+            d:{Module:'central_safety_fsm_v3',
+               Role:'THE SAFETY AUTHORITY. Reads every *_ok and *_status, crash_latched, emergency_stop and manual_override, and decides whether the vehicle may move.',
+               Clock:'clk_aon at 100 ns — ten times the timing margin of the AI blocks, which is exactly what you want for this block',
+               Out:'vehicle_enable, motor_enable, brake_control, throttle_limit, emergency_ack, alert_level, fault_code'}},
+ emerg    :{x:800,y:400,w:150,h:52, dom:'aon',  t1:'u_emergency',
+            t2:'985 cells · 10,260 µm²',
+            d:{Does:'independent emergency path from crash_latched and emergency_stop',
+               Shared:'hazard_lights, door_unlock and airbag_control are driven by BOTH this module and the safety FSM. They were once wired to the same net — two drivers fighting. Now OR-combined at the top: either FSM asserting is enough. Fail-safe by design.'}},
+ mcu      :{x:590,y:640,w:158,h:56, dom:'mcu',  t1:'u_mcu_interface',
+            t2:'919 cells · 13,863 µm²',
+            d:{Module:'mcu_axi_lite_interface',
+               Reads:'ALL 42 sensor_data entries plus every status signal — the widest fan-in in the design, while being only 2.2% of the area',
+               Timing:'on the 5 ns clock, the tightest. One nor2 with 68 loads accounts for 2.956 ns of a 5.223 ns path.',
+               Physical:'needs to be near the AXI pins on the right edge AND near the sensor data. Those pull in opposite directions — expect a placement compromise.'}},
+ flog     :{x:800,y:640,w:150,h:56, dom:'aon',  t1:'u_fault_logger',
+            t2:'339 cells · 3,378 µm²',
+            d:{Module:'fault_logger_sram_32kb',
+               Does:'only 339 cells of glue — the memory is the macro',
+               Reads:'sensor_data[0..3] and fault_code',
+               FINDING:'rd_en is tied 1\'b0 and rd_addr to 10\'d0. Nothing ever reads the fault log SRAM. Writes work; reads are disabled.'}},
+ sram     :{x:800,y:722,w:150,h:56, dom:'macro',t1:'2 × SRAM 512×32',
+            t2:'572,456 µm² · hard macros',
+            d:{Instances:'u_bank_lo and u_bank_hi, both R0, both LOCKED',
+               Size:'696.02 × 411.235 µm each = 286,228 µm² each',
+               Physical:'placed side by side with a 60 µm channel because 64 dout bits cross between the banks and power straps run down that gap',
+               Note:'114 of 117 pins are off-track — OpenRAM used its own grid, not sky130 track pitches'}},
+
+ // ---- outputs ----
+ out_ai   :{x:1010,y:170,w:150,h:52, dom:'ai',  t1:'health outputs',
+            t2:'25 pins',
+            d:{Ports:'system_health_score[7:0], battery_health_status[3:0], motor_health_status[3:0], thermal_health_status[3:0], safety_health_status[3:0], ai_processing_active',
+               SDC:'clk_100mhz, output delay max 4.5 ns (45% of 10 ns)'}},
+ out_ctrl :{x:1010,y:290,w:150,h:82, dom:'aon', t1:'actuator outputs',
+            t2:'8 pins · the chip\'s purpose',
+            d:{Ports:'vehicle_enable, motor_enable, brake_control, throttle_limit, cooling_control, hazard_lights, door_unlock, airbag_control',
+               Note:'cooling_control comes straight from u_thermal_ai, not the FSM',
+               SDC:'clk_10mhz_aon, output delay max 45.0 ns'}},
+ out_axi  :{x:1010,y:640,w:150,h:56, dom:'mcu', t1:'AXI + debug out',
+            t2:'~330 pins',
+            d:{Ports:'m_axi master signals, s_axi slave responses, fault_log_wr_en/addr/data, debug_data_out, debug_valid',
+               SDC:'clk_200mhz_mcu, output delay max 2.2 ns'}},
+
+ // ---- infrastructure rail ----
+ clkmgr   :{x:16, y:640,w:168,h:56, dom:'infra',t1:'u_clock_manager',
+            t2:'0 cells · ZERO gates',
+            d:{Module:'clock_manager_14nm',
+               Truth:'four assign statements passing the input clocks straight through, plus pll_locked tied 1\'b1. There is no PLL and no clock division.',
+               Why:'a placeholder so a real clock generator can be dropped in later without touching the top level',
+               Bug:'its clk_valid[3:0] output was once wired to the four reset nets — a second driver fighting reset_sync_v3. Now left unconnected.'}},
+ rst      :{x:16, y:712,w:168,h:64, dom:'infra',t1:'u_reset_sync',
+            t2:'163 cells → 8,953 flops',
+            d:{Module:'reset_sync_v3',
+               Does:'one 2-flop synchroniser plus a 16-cycle hold counter per domain, giving rst_ai_n, rst_aon_n, rst_sensor_n, rst_mcu_n',
+               'WHY IT HURTS':'163 cells (0.3% of the design) drive a reset into every one of 8,953 dfrtp_1 flip-flops. The netlist has 7 buffers total. One o21ai_0 was measured driving 5,962 reset pins; another net measured 15,372 loads at 1,136 ns.',
+               Fix:'repair_design builds the buffer tree. No RTL change helps.'}},
+ pwrdom   :{x:16, y:792,w:168,h:56, dom:'aon',  t1:'u_power_domain',
+            t2:'337 cells · 3,406 µm²',
+            d:{Does:'reads pwr_good and the three vdd status flags, drives pwr_en_ai/sensor/mcu',
+               Reality:'pd_req_ai, pd_req_sensor and pd_req_mcu are all tied 1\'b1, so it always enables everything. retention_enable, iso_enable and level_shifter_en are tied 0.',
+               Physical:'there is ONE power domain in silicon — CORE, VDD/VSS. No power switches, no isolation cells, no retention flops, no UPF. Gating is external, via the pwr_en_* pins.'}},
+ mode     :{x:16, y:864,w:168,h:56, dom:'aon',  t1:'u_mode_controller',
+            t2:'253 cells · 2,402 µm²',
+            d:{Module:'mode_config_enhanced_v3',
+               Does:'car / bike / auto / safe. Produces current_mode_aon and the two 42-bit sensor maps that decide which channels matter in which mode.',
+               Note:'the only module that takes two clocks directly (clk_aon and clk_ai)'}},
+ sync     :{x:232,y:864,w:150,h:56, dom:'infra',t1:'2 × sync_cell',
+            t2:'4 cells · 100 µm²',
+            d:{Does:'the ONLY clock domain crossings that are properly synchronised',
+               Which:'current_mode_aon → clk_ai, and current_mode_aon → clk_sensor. Both 2 bits, both 2-flop.',
+               Irony:'the 2-bit mode signal is synchronised; the 672-wire sensor_data bus is not'}}
+};
+
+const E = [
+ ['pin_adc','adc'], ['pin_dead',null], ['pin_dig','fabric','ch 12-41 direct'],
+ ['adc','fabric','12 ch'],
+ ['fabric','spine','42 × 16 b',1],
+ ['fabric','valid'], ['valid','grace'], ['grace','enable'], ['enable','fabric'],
+ ['spine','batt'],['spine','thermal'],['spine','motor'],['spine','dyn'],
+ ['spine','percep'],['spine','crash'],['spine','adas'],['spine','mctrl'],
+ ['spine','diag'],['spine','mcu',null,1],['spine','flog'],
+ ['batt','syshealth'],['thermal','syshealth'],['motor','syshealth'],
+ ['dyn','syshealth'],['percep','syshealth'],
+ ['syshealth','fsm'],['crash','fsm'],['crash','emerg'],
+ ['adas','mctrl'],
+ ['fsm','out_ctrl'],['emerg','out_ctrl'],['syshealth','out_ai'],
+ ['thermal','out_ai'],
+ ['mcu','out_axi'],['flog','sram'],['mcu','flog'],
+ ['pin_mode','mode'],['pin_axi','mcu'],['pin_clk','clkmgr'],['pin_clk','rst'],
+ ['pin_pwr','pwrdom'],['mode','sync'],['sync','spine']
+];
+
+const svg = document.getElementById('svg');
+const NS = 'http://www.w3.org/2000/svg';
+const mk = (t,a={}) => {const e=document.createElementNS(NS,t);
+  for(const k in a) e.setAttribute(k,a[k]); return e;};
+
+// bands
+[['SENSOR PIPELINE · clk_sensor',210,16,548],
+ ['AI + CONSUMERS',578,590,372],
+ ['DECIDE',790,800,162],
+ ['CHIP OUTPUTS',1000,1010,162]].forEach(([lab,,x,w])=>{});
+[[16,52,368,520,'SENSOR DOMAIN'],
+ [582,52,372,530,'AI DOMAIN + CONSUMERS'],
+ [792,160,166,300,'DECISION'],
+ [1002,160,166,220,'OUTPUTS'],
+ [16,624,368,300,'INFRASTRUCTURE']].forEach(([x,y,w,h,lab])=>{
+  svg.appendChild(mk('rect',{x:x-8,y:y-26,width:w+16,height:h+34,class:'band',rx:10}));
+  const t=mk('text',{x:x-2,y:y-12,class:'bandlab'}); t.textContent=lab; svg.appendChild(t);
+});
+
+function anchor(n,side){
+  const o=N[n];
+  return side==='r' ? [o.x+o.w, o.y+o.h/2] : [o.x, o.y+o.h/2];
+}
+E.forEach(([a,b,lab,wide])=>{
+  if(!b){ // dangling dead edge
+    const [x,y]=anchor(a,'r');
+    svg.appendChild(mk('path',{d:`M${x},${y} h44`,class:'edge dead'}));
+    const t=mk('text',{x:x+8,y:y-6,class:'elabel'}); t.textContent='discarded';
+    svg.appendChild(t); return;
+  }
+  const A=N[a],B=N[b];
+  let p;
+  if(B.x>=A.x+A.w){                      // left to right
+    const [x1,y1]=anchor(a,'r'), [x2,y2]=anchor(b,'l');
+    const m=x1+Math.max(18,(x2-x1)/2);
+    p=`M${x1},${y1} C${m},${y1} ${m},${y2} ${x2},${y2}`;
+  } else if (A.x>=B.x+B.w){              // right to left (feedback)
+    const [x1,y1]=anchor(a,'l'), [x2,y2]=anchor(b,'l');
+    p=`M${x1},${y1} C${x1-30},${y1} ${x2-30},${y2} ${x2},${y2}`;
+  } else {                               // same column, vertical
+    const x=A.x+A.w/2;
+    p=`M${x},${A.y+A.h} C${x+26},${A.y+A.h+14} ${x+26},${B.y-14} ${x},${B.y}`;
+  }
+  const cls='edge'+(wide?' wide':'')+((A.dom==='dead'||B.dom==='dead')?' dead':'');
+  svg.appendChild(mk('path',{d:p,class:cls}));
+  if(lab){
+    const [x1,y1]=anchor(a,'r');
+    const t=mk('text',{x:x1+10,y:y1-7,class:'elabel'}); t.textContent=lab;
+    svg.appendChild(t);
+  }
+});
+
+Object.entries(N).forEach(([id,o])=>{
+  const g=mk('g',{class:'node'}); g.dataset.id=id;
+  const c=cv(o.dom);
+  g.appendChild(mk('rect',{x:o.x,y:o.y,width:o.w,height:o.h,
+    fill:c+'22',stroke:c}));
+  const t1=mk('text',{x:o.x+11,y:o.y+21,class:'t1'}); t1.textContent=o.t1;
+  const t2=mk('text',{x:o.x+11,y:o.y+37,class:'t2'}); t2.textContent=o.t2;
+  g.appendChild(t1); g.appendChild(t2);
+  if(o.h>70){
+    const t3=mk('text',{x:o.x+11,y:o.y+56,class:'t2'});
+    t3.textContent='click for detail'; g.appendChild(t3);
+  }
+  g.addEventListener('click',()=>show(id));
+  svg.appendChild(g);
+});
+
+const panel=document.getElementById('panel');
+function show(id){
+  const o=N[id], c=cv(o.dom);
+  let h=`<h2>${o.t1}</h2><div class="hint">${o.t2}</div>`;
+  h+=`<span class="tag" style="background:${c}33;color:${c};border:1px solid ${c}66">${
+      {sensor:'clk_sensor · 50 MHz',ai:'clk_ai · 100 MHz',aon:'clk_aon · 10 MHz',
+       mcu:'clk_mcu · 200 MHz',infra:'infrastructure',macro:'hard macro',
+       dead:'unconnected',bus:'signal bus'}[o.dom]}</span><dl>`;
+  for(const k in o.d) h+=`<dt>${k}</dt><dd>${o.d[k]}</dd>`;
+  panel.innerHTML=h+'</dl>';
+  panel.scrollTop=0;
+}
+
+const AREA=[['u_sensor_fabric',244062],['u_diagnostic',118908],
+ ['u_sensor_grace',105193],['u_adc_interface',62111],['u_motor_control',47933],
+ ['u_battery_ai',40121],['u_motor_ai',36857],['u_adas_controller',24719],
+ ['u_dynamics_ai',20159],['u_perception_ai',18426],['everything else',82785]];
+document.getElementById('areatab').innerHTML =
+ '<tr><th>module</th><th>µm²</th><th style="width:70px"></th></tr>'+
+ AREA.map(([n,a])=>`<tr><td>${n}</td><td>${a.toLocaleString()}</td>
+   <td><div class="bar" style="width:${a/244062*100}%;background:${
+     a>100000?cv('mcu'):cv('ai')}"></div></td></tr>`).join('');
+
+show('spine');
+</script>
+</body>
+</html>

@@ -1,0 +1,342 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1760 1470" width="1760" height="1470" font-family="Segoe UI, Helvetica, Arial, sans-serif">
+
+<defs>
+  <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#64748b"/></marker>
+  <marker id="arw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#7c3aed"/></marker>
+  <marker id="ard" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M0,0 L10,5 L0,10 z" fill="#b0b7c3"/></marker>
+</defs>
+
+<rect width="1760" height="1470" fill="#ffffff"/>
+
+<!-- ================= HEADER ================= -->
+<text x="40" y="44" font-size="25" font-weight="700" fill="#0f172a">IVCU-EV V3 — from 42 sensors to the top level</text>
+<text x="40" y="68" font-size="13.5" fill="#64748b">Every box is a real module instance. Cell counts and areas from synth_full_20260804_160929.log. Standard-cell total 633,274 um2 + 572,456 um2 of SRAM macro.</text>
+
+<g font-size="12.5" fill="#475569">
+  <rect x="40"  y="86" width="13" height="13" rx="3" fill="#0d9488"/><text x="60"  y="97">clk_sensor 50 MHz</text>
+  <rect x="196" y="86" width="13" height="13" rx="3" fill="#4f46e5"/><text x="216" y="97">clk_ai 100 MHz</text>
+  <rect x="336" y="86" width="13" height="13" rx="3" fill="#b45309"/><text x="356" y="97">clk_aon 10 MHz (always on)</text>
+  <rect x="546" y="86" width="13" height="13" rx="3" fill="#be123c"/><text x="566" y="97">clk_mcu 200 MHz</text>
+  <rect x="700" y="86" width="13" height="13" rx="3" fill="#475569"/><text x="720" y="97">infrastructure</text>
+  <rect x="820" y="86" width="13" height="13" rx="3" fill="#0e7490"/><text x="840" y="97">SRAM macro</text>
+  <rect x="940" y="86" width="13" height="13" rx="3" fill="#b0b7c3"/><text x="960" y="97">built but unconnected / discarded</text>
+</g>
+
+<g font-size="11" fill="#94a3b8" letter-spacing="1.4">
+  <text x="40"   y="140">TOP-LEVEL PINS</text>
+  <text x="305"  y="140">CONVERT</text>
+  <text x="520"  y="140">SENSOR PROCESSING</text>
+  <text x="775"  y="140">THE SPINE</text>
+  <text x="955"  y="140">CONSUMERS</text>
+  <text x="1235" y="140">DECIDE</text>
+  <text x="1480" y="140">CHIP OUTPUTS</text>
+</g>
+
+<!-- ================= EDGES (behind boxes) ================= -->
+<g fill="none" stroke="#94a3b8" stroke-width="1.8" marker-end="url(#ar)">
+  <path d="M255,208 C280,208 280,230 300,230"/>
+  <path d="M255,392 C400,392 400,270 515,270"/>
+  <path d="M470,230 C495,230 495,260 515,260"/>
+  <path d="M720,300 C740,300 745,330 770,330"/>
+  <path d="M720,418 C745,418 745,470 720,470"/>
+  <path d="M720,546 C748,546 748,600 720,600"/>
+  <path d="M620,636 C560,636 505,560 505,300 C505,250 508,240 515,250"/>
+  <path d="M1180,190 C1210,190 1215,300 1230,330"/>
+  <path d="M1180,266 C1212,266 1215,310 1230,336"/>
+  <path d="M1180,342 C1212,342 1214,340 1230,340"/>
+  <path d="M1180,418 C1212,418 1214,360 1230,348"/>
+  <path d="M1180,494 C1212,494 1214,370 1230,352"/>
+  <path d="M1180,570 C1205,570 1210,480 1230,470"/>
+  <path d="M1180,570 C1205,570 1212,580 1230,594"/>
+  <path d="M1325,376 C1325,395 1328,405 1330,420"/>
+  <path d="M1425,468 C1450,468 1455,470 1475,470"/>
+  <path d="M1425,594 C1450,594 1458,500 1475,486"/>
+  <path d="M1325,300 C1400,300 1420,330 1475,330"/>
+  <path d="M1180,266 C1330,266 1400,300 1475,322"/>
+  <path d="M1180,676 C1205,676 1205,700 1180,708"/>
+  <path d="M1180,884 C1300,884 1380,880 1475,884"/>
+  <path d="M1180,964 C1200,964 1210,964 1230,964"/>
+  <path d="M1060,916 C1060,930 1090,935 1120,940"/>
+</g>
+
+<!-- wide bus edges -->
+<g fill="none" stroke="#7c3aed" stroke-width="4" marker-end="url(#arw)">
+  <path d="M720,270 C745,270 748,290 770,300"/>
+  <path d="M900,300 C925,300 928,190 950,190"/>
+  <path d="M900,330 C925,330 928,266 950,266"/>
+  <path d="M900,360 C925,360 928,342 950,342"/>
+  <path d="M900,390 C925,390 928,418 950,418"/>
+  <path d="M900,420 C925,420 928,494 950,494"/>
+  <path d="M900,450 C925,450 928,570 950,570"/>
+  <path d="M900,480 C925,480 928,646 950,646"/>
+  <path d="M900,510 C925,510 928,722 950,722"/>
+  <path d="M900,540 C925,540 928,802 950,802"/>
+  <path d="M900,570 C925,570 928,884 950,884"/>
+  <path d="M900,600 C925,600 928,964 950,964"/>
+</g>
+
+<!-- discarded -->
+<g fill="none" stroke="#b0b7c3" stroke-width="2" stroke-dasharray="6 5" marker-end="url(#ard)">
+  <path d="M255,300 h48"/>
+</g>
+<text x="262" y="292" font-size="11" font-style="italic" fill="#94a3b8">discarded</text>
+
+<!-- ================= COLUMN 1 : PINS ================= -->
+<g>
+<rect x="40" y="170" width="215" height="76" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="1.6"/>
+<text x="54" y="192" font-size="13" font-weight="650" fill="#0f172a">sensor_adc_in_0..11</text>
+<text x="54" y="210" font-size="11" fill="#475569">12 x 12 b + 12 valid = 156 pins</text>
+<text x="54" y="228" font-size="11" fill="#475569">analog path — the only one that works</text>
+
+<rect x="40" y="262" width="215" height="76" rx="7" fill="#b0b7c31a" stroke="#b0b7c3" stroke-width="1.6" stroke-dasharray="6 4"/>
+<text x="54" y="284" font-size="13" font-weight="650" fill="#64748b">sensor_adc_in_12..41</text>
+<text x="54" y="302" font-size="11" fill="#94a3b8">30 x 12 b + 30 valid = 390 pins</text>
+<text x="54" y="320" font-size="11" font-weight="650" fill="#be123c">ACCEPTED AND THROWN AWAY</text>
+
+<rect x="40" y="354" width="215" height="76" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="1.6"/>
+<text x="54" y="376" font-size="13" font-weight="650" fill="#0f172a">sensor_digital_in_0..41</text>
+<text x="54" y="394" font-size="11" fill="#475569">42 x 32 b + 42 valid = 1,386 pins</text>
+<text x="54" y="412" font-size="11" fill="#475569">ch 12–41 bypass the ADC entirely</text>
+
+<rect x="40" y="446" width="215" height="64" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="1.6"/>
+<text x="54" y="468" font-size="13" font-weight="650" fill="#0f172a">mode + emergency</text>
+<text x="54" y="486" font-size="11" fill="#475569">car / bike / auto, e-stop, override</text>
+<text x="54" y="502" font-size="11" fill="#475569">in-delay 35 ns of a 100 ns period</text>
+
+<rect x="40" y="526" width="215" height="64" rx="7" fill="#be123c1a" stroke="#be123c" stroke-width="1.6"/>
+<text x="54" y="548" font-size="13" font-weight="650" fill="#0f172a">s_axi + m_axi</text>
+<text x="54" y="566" font-size="11" fill="#475569">440 pins, AXI-Lite master + slave</text>
+<text x="54" y="582" font-size="11" fill="#475569">64-bit bus carrying 32-bit data</text>
+
+<rect x="40" y="606" width="215" height="64" rx="7" fill="#4755691a" stroke="#475569" stroke-width="1.6"/>
+<text x="54" y="628" font-size="13" font-weight="650" fill="#0f172a">4 clocks + 2 resets</text>
+<text x="54" y="646" font-size="11" fill="#475569">100 / 10 / 50 / 200 MHz, all async</text>
+<text x="54" y="662" font-size="11" fill="#475569">por_n is the true master reset</text>
+
+<rect x="40" y="686" width="215" height="64" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="1.6"/>
+<text x="54" y="708" font-size="13" font-weight="650" fill="#0f172a">vdd_core / io / ram</text>
+<text x="54" y="726" font-size="11" font-weight="650" fill="#be123c">LOGIC inputs, NOT supplies</text>
+<text x="54" y="742" font-size="11" fill="#475569">PMIC status flags. Real VDD is metal.</text>
+</g>
+
+<!-- ================= COLUMN 2 : ADC ================= -->
+<rect x="300" y="170" width="170" height="120" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="1.6"/>
+<text x="314" y="192" font-size="13" font-weight="650" fill="#0f172a">u_adc_interface</text>
+<text x="314" y="211" font-size="11" fill="#475569">7,947 cells</text>
+<text x="314" y="227" font-size="11" font-weight="650" fill="#0d9488">62,111 um2 · 9.8%</text>
+<text x="314" y="248" font-size="11" fill="#475569">42 analog in → 12 out</text>
+<text x="314" y="264" font-size="10.5" fill="#94a3b8">zero-extends 12 b to 32 b</text>
+<text x="314" y="279" font-size="10.5" fill="#94a3b8">calib. multiplier built, tied off</text>
+
+<!-- ================= COLUMN 3 : SENSOR PROCESSING ================= -->
+<rect x="520" y="200" width="200" height="140" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="2.4"/>
+<text x="534" y="223" font-size="14" font-weight="700" fill="#0f172a">u_sensor_fabric</text>
+<text x="534" y="242" font-size="11" fill="#475569">23,603 cells</text>
+<text x="534" y="259" font-size="12.5" font-weight="700" fill="#0d9488">244,062 um2 · 38.5%</text>
+<text x="534" y="279" font-size="10.5" fill="#475569">42 x 4-deep moving average</text>
+<text x="534" y="295" font-size="10.5" fill="#475569">avg = sum[SHIFT +: 16] — a bit</text>
+<text x="534" y="310" font-size="10.5" fill="#475569">select, zero gates</text>
+<text x="534" y="329" font-size="10.5" font-style="italic" fill="#94a3b8">largest module · was 819,661 um2</text>
+
+<rect x="520" y="380" width="200" height="76" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="1.6"/>
+<text x="534" y="402" font-size="13" font-weight="650" fill="#0f172a">u_sensor_validation</text>
+<text x="534" y="420" font-size="11" fill="#475569">1,184 cells · 7,219 um2</text>
+<text x="534" y="438" font-size="10.5" fill="#be123c">ranges all tied 0 / 0xFFFF —</text>
+<text x="534" y="452" font-size="10.5" fill="#be123c">no range check actually happens</text>
+
+<rect x="520" y="496" width="200" height="100" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="2.4"/>
+<text x="534" y="519" font-size="13.5" font-weight="700" fill="#0f172a">u_sensor_grace</text>
+<text x="534" y="537" font-size="11" fill="#475569">12,898 cells</text>
+<text x="534" y="554" font-size="12.5" font-weight="700" fill="#0d9488">105,193 um2 · 16.6%</text>
+<text x="534" y="573" font-size="10.5" fill="#475569">42 x 32-bit timers</text>
+<text x="534" y="588" font-size="10.5" font-weight="650" fill="#be123c">grace_timeout is a PORT — see 2</text>
+
+<rect x="520" y="636" width="200" height="76" rx="7" fill="#0d94881a" stroke="#0d9488" stroke-width="1.6"/>
+<text x="534" y="658" font-size="13" font-weight="650" fill="#0f172a">u_sensor_enable_logic</text>
+<text x="534" y="676" font-size="11" fill="#475569">170 cells · 1,954 um2</text>
+<text x="534" y="694" font-size="10.5" fill="#475569">42-bit mask gating the fabric</text>
+<text x="534" y="708" font-size="10.5" font-style="italic" fill="#94a3b8">feedback loop back into fabric</text>
+
+<!-- ================= COLUMN 4 : SPINE ================= -->
+<rect x="775" y="170" width="125" height="500" rx="8" fill="#7c3aed1f" stroke="#7c3aed" stroke-width="2.6"/>
+<text x="837" y="420" font-size="15" font-weight="700" fill="#5b21b6" text-anchor="middle" transform="rotate(-90 837 420)">sensor_data[0..41]</text>
+<text x="820" y="420" font-size="11.5" fill="#6d28d9" text-anchor="middle" transform="rotate(-90 820 420)">42 x 16 b = 672 wires</text>
+<text x="857" y="420" font-size="11" fill="#7c3aed" text-anchor="middle" transform="rotate(-90 857 420)">written on clk_sensor · read on 3 other clocks</text>
+<text x="875" y="420" font-size="11" font-weight="650" fill="#be123c" text-anchor="middle" transform="rotate(-90 875 420)">NO SYNCHRONISER</text>
+
+<!-- ================= COLUMN 5 : CONSUMERS ================= -->
+<g>
+<rect x="950" y="160" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="181" font-size="12.5" font-weight="650" fill="#0f172a">u_battery_ai</text>
+<text x="964" y="198" font-size="10.5" fill="#475569">4,808 cells · 40,121 um2 · reads ch 0,1,4-9,11,12</text>
+<text x="964" y="213" font-size="10.5" fill="#94a3b8">holds a 32-cycle seq_divider · WNS -0.902 ns</text>
+
+<rect x="950" y="236" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="257" font-size="12.5" font-weight="650" fill="#0f172a">u_thermal_ai</text>
+<text x="964" y="274" font-size="10.5" fill="#475569">614 cells · 5,797 um2 · reads ch 0,1,2,3,10,25,26,27,34</text>
+<text x="964" y="289" font-size="10.5" fill="#94a3b8">drives cooling_control directly</text>
+
+<rect x="950" y="312" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="333" font-size="12.5" font-weight="650" fill="#0f172a">u_motor_ai</text>
+<text x="964" y="350" font-size="10.5" fill="#475569">5,008 cells · 36,857 um2 · reads 13 channels</text>
+<text x="964" y="365" font-size="10.5" fill="#94a3b8">4 pairs of ports share one sensor each</text>
+
+<rect x="950" y="388" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="409" font-size="12.5" font-weight="650" fill="#0f172a">u_dynamics_ai</text>
+<text x="964" y="426" font-size="10.5" fill="#475569">2,708 cells · 20,159 um2 · reads ch 14,15,16,22,23,24</text>
+
+<rect x="950" y="464" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="485" font-size="12.5" font-weight="650" fill="#0f172a">u_perception_ai</text>
+<text x="964" y="502" font-size="10.5" fill="#475569">1,796 cells · 18,426 um2 · ultrasonic, camera, radar,</text>
+<text x="964" y="517" font-size="10.5" fill="#475569">lidar, gps, tpms (ch 28-33) · 2nd seq_divider</text>
+
+<rect x="950" y="540" width="230" height="60" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="2.2"/>
+<text x="964" y="561" font-size="12.5" font-weight="650" fill="#0f172a">u_crash_ai</text>
+<text x="964" y="578" font-size="10.5" fill="#475569">1,468 cells · 13,830 um2 · ch 13,14,15</text>
+<text x="964" y="593" font-size="10.5" font-weight="650" fill="#b45309">on clk_aon — must survive AI power-down</text>
+
+<rect x="950" y="616" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="637" font-size="12.5" font-weight="650" fill="#0f172a">u_adas_controller</text>
+<text x="964" y="654" font-size="10.5" fill="#475569">24,719 um2 · cruise, lane keep, auto brake</text>
+
+<rect x="950" y="692" width="230" height="60" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="964" y="713" font-size="12.5" font-weight="650" fill="#0f172a">u_motor_control</text>
+<text x="964" y="730" font-size="10.5" fill="#475569">47,933 um2 · torque / regen / steering assist</text>
+<text x="964" y="745" font-size="10.5" font-weight="650" fill="#be123c">its 3 outputs have no top-level port</text>
+
+<rect x="950" y="768" width="230" height="68" rx="7" fill="#b0b7c326" stroke="#b0b7c3" stroke-width="2.4" stroke-dasharray="6 4"/>
+<text x="964" y="789" font-size="12.5" font-weight="650" fill="#64748b">u_diagnostic</text>
+<text x="964" y="807" font-size="12.5" font-weight="700" fill="#be123c">118,908 um2 · 18.8%</text>
+<text x="964" y="824" font-size="10.5" font-weight="650" fill="#be123c">NOT ONE OUTPUT IS CONNECTED — see 1</text>
+
+<rect x="950" y="852" width="230" height="64" rx="7" fill="#be123c1a" stroke="#be123c" stroke-width="1.6"/>
+<text x="964" y="873" font-size="12.5" font-weight="650" fill="#0f172a">u_mcu_interface</text>
+<text x="964" y="890" font-size="10.5" fill="#475569">919 cells · 13,863 um2 · reads ALL 42 channels</text>
+<text x="964" y="905" font-size="10.5" fill="#94a3b8">widest fan-in, tightest clock (5 ns)</text>
+
+<rect x="950" y="932" width="230" height="64" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="1.6"/>
+<text x="964" y="953" font-size="12.5" font-weight="650" fill="#0f172a">u_fault_logger</text>
+<text x="964" y="970" font-size="10.5" fill="#475569">339 cells of glue · reads ch 0-3</text>
+<text x="964" y="985" font-size="10.5" font-weight="650" fill="#be123c">rd_en tied 0 — the log is never read</text>
+</g>
+
+<!-- ================= COLUMN 6 : DECIDE ================= -->
+<rect x="1230" y="300" width="195" height="76" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="1244" y="322" font-size="12.5" font-weight="650" fill="#0f172a">u_system_health</text>
+<text x="1244" y="340" font-size="10.5" fill="#475569">392 cells · 3,406 um2</text>
+<text x="1244" y="356" font-size="10.5" fill="#475569">merges 5 scores + 5 statuses</text>
+<text x="1244" y="370" font-size="10.5" fill="#94a3b8">plus a real 42-bit fault popcount</text>
+
+<rect x="1230" y="420" width="195" height="96" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="2.6"/>
+<text x="1244" y="443" font-size="13.5" font-weight="700" fill="#0f172a">u_central_fsm</text>
+<text x="1244" y="461" font-size="10.5" fill="#475569">1,159 cells · 12,078 um2</text>
+<text x="1244" y="479" font-size="11" font-weight="650" fill="#b45309">THE SAFETY AUTHORITY</text>
+<text x="1244" y="495" font-size="10.5" fill="#475569">100 ns period = 10x the margin</text>
+<text x="1244" y="509" font-size="10.5" fill="#475569">of the AI blocks. Deliberate.</text>
+
+<rect x="1230" y="556" width="195" height="76" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="1.6"/>
+<text x="1244" y="578" font-size="12.5" font-weight="650" fill="#0f172a">u_emergency</text>
+<text x="1244" y="596" font-size="10.5" fill="#475569">985 cells · 10,260 um2</text>
+<text x="1244" y="613" font-size="10.5" fill="#475569">shares 3 outputs with the FSM,</text>
+<text x="1244" y="627" font-size="10.5" fill="#475569">OR-combined at the top (fail-safe)</text>
+
+<rect x="1230" y="932" width="195" height="64" rx="7" fill="#0e74901a" stroke="#0e7490" stroke-width="2.2"/>
+<text x="1244" y="953" font-size="12.5" font-weight="650" fill="#0f172a">2 x SRAM 512x32</text>
+<text x="1244" y="970" font-size="10.5" fill="#475569">572,456 um2 hard macro</text>
+<text x="1244" y="985" font-size="10.5" fill="#94a3b8">696.02 x 411.235 um each, LOCKED</text>
+
+<!-- ================= COLUMN 7 : OUTPUTS ================= -->
+<rect x="1475" y="300" width="245" height="76" rx="7" fill="#4f46e51a" stroke="#4f46e5" stroke-width="1.6"/>
+<text x="1489" y="322" font-size="12.5" font-weight="650" fill="#0f172a">health outputs · 25 pins</text>
+<text x="1489" y="340" font-size="10.5" fill="#475569">system_health_score, battery /</text>
+<text x="1489" y="355" font-size="10.5" fill="#475569">motor / thermal / safety status,</text>
+<text x="1489" y="370" font-size="10.5" fill="#475569">ai_processing_active</text>
+
+<rect x="1475" y="420" width="245" height="120" rx="7" fill="#b453091a" stroke="#b45309" stroke-width="2.6"/>
+<text x="1489" y="443" font-size="13.5" font-weight="700" fill="#0f172a">actuator outputs · 8 pins</text>
+<text x="1489" y="462" font-size="11" font-style="italic" fill="#94a3b8">what the chip exists to do</text>
+<text x="1489" y="482" font-size="11" fill="#475569">vehicle_enable · motor_enable</text>
+<text x="1489" y="498" font-size="11" fill="#475569">brake_control · throttle_limit</text>
+<text x="1489" y="514" font-size="11" fill="#475569">cooling_control · hazard_lights</text>
+<text x="1489" y="530" font-size="11" fill="#475569">door_unlock · airbag_control</text>
+
+<rect x="1475" y="852" width="245" height="64" rx="7" fill="#be123c1a" stroke="#be123c" stroke-width="1.6"/>
+<text x="1489" y="873" font-size="12.5" font-weight="650" fill="#0f172a">AXI + debug out</text>
+<text x="1489" y="890" font-size="10.5" fill="#475569">m_axi master, s_axi responses,</text>
+<text x="1489" y="905" font-size="10.5" fill="#475569">fault_log_wr/addr/data, debug_data_out</text>
+
+<!-- ================= INFRASTRUCTURE BAND ================= -->
+<rect x="40" y="1030" width="1680" height="112" rx="9" fill="#f8fafc" stroke="#e2e8f0"/>
+<text x="54" y="1052" font-size="11" fill="#94a3b8" letter-spacing="1.4">INFRASTRUCTURE — feeds every block above</text>
+
+<rect x="56" y="1062" width="250" height="66" rx="6" fill="#4755691a" stroke="#475569" stroke-width="1.4"/>
+<text x="68" y="1082" font-size="12" font-weight="650" fill="#0f172a">u_clock_manager</text>
+<text x="68" y="1099" font-size="10.5" font-weight="650" fill="#be123c">0 cells — ZERO gates</text>
+<text x="68" y="1114" font-size="10.5" fill="#475569">4 assigns. No PLL, no division.</text>
+
+<rect x="326" y="1062" width="290" height="66" rx="6" fill="#4755691a" stroke="#475569" stroke-width="2.2"/>
+<text x="338" y="1082" font-size="12" font-weight="650" fill="#0f172a">u_reset_sync — 163 cells</text>
+<text x="338" y="1099" font-size="10.5" fill="#475569">2-flop sync + 16-cycle hold per domain</text>
+<text x="338" y="1114" font-size="10.5" font-weight="650" fill="#be123c">drives 8,953 flops · design has 7 buffers</text>
+
+<rect x="636" y="1062" width="250" height="66" rx="6" fill="#b453091a" stroke="#b45309" stroke-width="1.4"/>
+<text x="648" y="1082" font-size="12" font-weight="650" fill="#0f172a">u_power_domain</text>
+<text x="648" y="1099" font-size="10.5" fill="#475569">337 cells · 3,406 um2</text>
+<text x="648" y="1114" font-size="10.5" fill="#475569">requests tied 1 — always all-on</text>
+
+<rect x="906" y="1062" width="250" height="66" rx="6" fill="#b453091a" stroke="#b45309" stroke-width="1.4"/>
+<text x="918" y="1082" font-size="12" font-weight="650" fill="#0f172a">u_mode_controller</text>
+<text x="918" y="1099" font-size="10.5" fill="#475569">253 cells · car / bike / auto / safe</text>
+<text x="918" y="1114" font-size="10.5" fill="#475569">only module taking two clocks</text>
+
+<rect x="1176" y="1062" width="250" height="66" rx="6" fill="#4755691a" stroke="#475569" stroke-width="1.4"/>
+<text x="1188" y="1082" font-size="12" font-weight="650" fill="#0f172a">2 x sync_cell — 4 cells</text>
+<text x="1188" y="1099" font-size="10.5" fill="#475569">the ONLY synchronised crossings</text>
+<text x="1188" y="1114" font-size="10.5" fill="#475569">carry 2 bits of mode. That is all.</text>
+
+<rect x="1446" y="1062" width="258" height="66" rx="6" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.4"/>
+<text x="1458" y="1082" font-size="11.5" font-weight="650" fill="#be123c">ONE power domain in silicon</text>
+<text x="1458" y="1099" font-size="10.5" fill="#475569">CORE, VDD/VSS. No switches, no</text>
+<text x="1458" y="1114" font-size="10.5" fill="#475569">isolation, no retention, no UPF.</text>
+
+<!-- ================= FINDINGS ================= -->
+<text x="40" y="1188" font-size="11" fill="#94a3b8" letter-spacing="1.4">WHAT THE DIAGRAM SHOWS THAT THE CODE DOES NOT SAY OUT LOUD</text>
+
+<rect x="40" y="1204" width="405" height="120" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.6"/>
+<circle cx="66" cy="1230" r="13" fill="#be123c"/><text x="66" y="1235" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">1</text>
+<text x="88" y="1235" font-size="13" font-weight="700" fill="#0f172a">118,908 um2 that drives nothing</text>
+<text x="56" y="1258" font-size="11.5" fill="#475569">u_diagnostic is the 3rd largest module, 18.8% of</text>
+<text x="56" y="1275" font-size="11.5" fill="#475569">your standard-cell area. Read its instantiation:</text>
+<text x="56" y="1292" font-size="11.5" fill="#475569">12 inputs, 3 tie-offs, and not one output port.</text>
+<text x="56" y="1311" font-size="11.5" font-weight="650" fill="#be123c">Removing it drops cells 633,274 → 514,366 um2.</text>
+
+<rect x="465" y="1204" width="405" height="120" rx="8" fill="#fef2f2" stroke="#fecaca" stroke-width="1.6"/>
+<circle cx="491" cy="1230" r="13" fill="#be123c"/><text x="491" y="1235" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">2</text>
+<text x="513" y="1235" font-size="13" font-weight="700" fill="#0f172a">the same bug, a second time</text>
+<text x="481" y="1258" font-size="11.5" fill="#475569">.grace_timeout(32'd1000000) is a PORT, not a</text>
+<text x="481" y="1275" font-size="11.5" fill="#475569">parameter. The constant never reaches the module,</text>
+<text x="481" y="1292" font-size="11.5" fill="#475569">so 42 general 32-bit comparators get built.</text>
+<text x="481" y="1311" font-size="11.5" font-weight="650" fill="#be123c">Identical to the bug that cost 575,000 um2.</text>
+
+<rect x="890" y="1204" width="405" height="120" rx="8" fill="#fffbeb" stroke="#fde68a" stroke-width="1.6"/>
+<circle cx="916" cy="1230" r="13" fill="#b45309"/><text x="916" y="1235" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">3</text>
+<text x="938" y="1235" font-size="13" font-weight="700" fill="#0f172a">672 wires cross unsynchronised</text>
+<text x="906" y="1258" font-size="11.5" fill="#475569">sensor_data[] is written on clk_sensor and read on</text>
+<text x="906" y="1275" font-size="11.5" fill="#475569">clk_ai, clk_aon and clk_mcu with no sync_cell —</text>
+<text x="906" y="1292" font-size="11.5" fill="#475569">including the path into the safety FSM.</text>
+<text x="906" y="1311" font-size="11.5" font-weight="650" fill="#b45309">The 2-bit mode signal IS synchronised. Odd.</text>
+
+<rect x="1315" y="1204" width="405" height="120" rx="8" fill="#f0fdfa" stroke="#99f6e4" stroke-width="1.6"/>
+<circle cx="1341" cy="1230" r="13" fill="#0d9488"/><text x="1341" y="1235" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">4</text>
+<text x="1363" y="1235" font-size="13" font-weight="700" fill="#0f172a">only 12 of 42 analog channels</text>
+<text x="1331" y="1258" font-size="11.5" fill="#475569">Channels 0–11 arrive analog through the ADC.</text>
+<text x="1331" y="1275" font-size="11.5" fill="#475569">Channels 12–41 arrive already digital and bypass</text>
+<text x="1331" y="1292" font-size="11.5" fill="#475569">it. The ADC source says so in a comment:</text>
+<text x="1331" y="1311" font-size="11.5" font-style="italic" fill="#0d9488">"ADCs 12-41 are ignored — only 12 outputs."</text>
+
+<text x="40" y="1360" font-size="11.5" fill="#94a3b8">Sources: RTL/ivcu_ev_v3_hybrid_top.sv (1,445 lines) · synth_out/synth_full_20260804_160929.log · SDC/ivcu_ev_v3.sdc · 6 August 2026</text>
+</svg>
