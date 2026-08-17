@@ -72,16 +72,48 @@ echo "--- area -----------------------------------------------------"
 grep "Chip area for" "${LOGFILE}" | sed 's/^/  /'
 echo
 
+#-----------------------------------------------------------------------------
+# PORT COUNT
+#
+# CORRECTED 13 Aug 2026.  This used to count port DECLARATIONS and compare
+# them against 237, which is the BIT count.  "input [11:0] adc_data" is one
+# declaration and twelve pins, so the check compared two different quantities
+# and looked alarming when nothing was wrong.
+#
+# What matters for the floorplan is bits - those are the physical pins that
+# have to be placed on the die boundary.
+#-----------------------------------------------------------------------------
 echo "--- top-level ports ------------------------------------------"
-echo "  The design boundary should be 237 pins.  V3 had 1,344 sensor"
-echo "  pins alone, which is why the floorplan could not place them."
-awk '/^module '"${TOP}"'/,/;/' "${NETLIST}" \
-  | tr ',' '\n' | grep -c '[a-z]' | sed 's/^/  port names in header: /'
+awk '
+  /^[[:space:]]*(input|output|inout)\b/ {
+      # width from a [hi:lo] range, default 1
+      w = 1
+      if (match($0, /\[[0-9]+:[0-9]+\]/)) {
+          r = substr($0, RSTART+1, RLENGTH-2)
+          split(r, a, ":")
+          hi = a[1] + 0; lo = a[2] + 0
+          w = (hi > lo ? hi - lo : lo - hi) + 1
+      }
+      # a declaration may name several ports: input a, b, c;
+      line = $0
+      sub(/^[[:space:]]*(input|output|inout)[[:space:]]*/, "", line)
+      sub(/\[[0-9]+:[0-9]+\][[:space:]]*/, "", line)
+      sub(/;.*$/, "", line)
+      n = split(line, names, ",")
+      cnt = 0
+      for (i = 1; i <= n; i++) if (names[i] ~ /[A-Za-z_]/) cnt++
+      decls += cnt
+      bits  += cnt * w
+  }
+  END {
+      printf "  port declarations : %d\n", decls
+      printf "  PHYSICAL PINS     : %d\n", bits
+  }
+' "${NETLIST}"
 echo
-
-echo "--- pin count sanity -----------------------------------------"
-grep -cE '^[[:space:]]*(input|output|inout)' "${NETLIST}" \
-  | sed 's/^/  port declarations: /'
+echo "  Target is 237 pins on a 5,840 um perimeter = 24.6 um per pin."
+echo "  V3 had 1,344 sensor pins alone = 4.3 um per pin, which is why"
+echo "  the floorplan could not place and route them."
 echo
 
 echo "  full log: ${LOGFILE}"

@@ -1,10 +1,42 @@
+# ============================================================================
+# IVCU-EV V4 — files excluded from version control
+#
+# Rule: commit what a human wrote, not what a machine generated from it.
+# Everything below regenerates from the scripts in this repository.
+# ============================================================================
+
+# ---- layout databases and generated netlists (~400 MB) ---------------------
+pd_v4/*
+pnr_out/
+powerplan
 synth_out/
+synth_out_v4/*netlist*.v
 qc/
+sta_out/
+
+# ---- PDK: install separately, do not vendor -------------------------------
 libs/
 lef/
+
+# ---- logs (default: excluded) ---------------------------------------------
 *.log
+
+# ---- editor and OS junk ----------------------------------------------------
 RTL_backup_*/
-pnr_out/
 *:Zone.Identifier
-pnr_out/
-*:Zone.Identifier
+*.swp
+*~
+.DS_Store
+
+# ============================================================================
+# EXCEPTIONS — kept as evidence for the results in README.md
+#
+# These must come last: when several patterns match a file, the LAST one wins.
+# Put a negation above its matching rule and it will be silently overridden.
+# ============================================================================
+!pd_v4/*.rpt
+!pd_v4/*.csv
+!qc_v4/*.log
+!synth_out_v4/synth_*.log
+HANDOFF_V4_STAGE2_PDN.md
+qc_v4/iverilog.log

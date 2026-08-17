@@ -1,0 +1,35 @@
+==========================================================================
+IVCU-EV V4  constant table check
+file: /home/venky/final_ivcu_project/RTL_V4/ivcu_defs.vh
+==========================================================================
+SENSOR_ATTR_TABLE    PASS
+CAR_MASK             PASS
+BIKE_MASK            PASS
+BYPASS_ELIGIBLE      PASS
+
+class census
+    SAFETY_CRITICAL        35
+    POWERTRAIN_DEGRADE     13
+    CONDITIONAL_BYPASS      8
+    COMFORT_ADAS            8
+    total                  64  PASS
+
+safety invariants
+    exactly 8 bypassable channels                 PASS (8)
+    no safety-critical channel is bypassable      PASS
+    every HV channel is service-centre only       PASS
+    GPS (ch 57) enabled in BIKE mode              PASS
+    SOC (ch 13) enabled in BIKE mode              PASS
+    side stand (ch 48) disabled in CAR mode       PASS
+
+mask population
+    CAR_MASK  active channels  62
+    BIKE_MASK active channels  48
+
+scan timing
+    car  sweep  64 ch x 4 cyc @ 25 MHz = 10.24 us
+    bike sweep  48 ch x 4 cyc @ 25 MHz = 7.68 us
+
+==========================================================================
+RESULT: ALL CHECKS PASS
+==========================================================================

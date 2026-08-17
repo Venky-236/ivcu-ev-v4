@@ -1,0 +1,123 @@
+=== ivcu_actuator_output_mgr ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_adc_scan_sequencer ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_afe_serializer ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_ai_cluster ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_apb_regs ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_battery_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_cdc_bit_sync ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_cdc_bus_sync ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_cdc_pulse_sync ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_central_safety_fsm ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_crash_severity ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_driver_input_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_dynamics_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_emergency_response ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_ev_v4_top ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_fault_logger ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_gps_receiver ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hazard_blinker ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_health_scorer ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_contactor_ctrl ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_crash_detect ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_monitors ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_pyro_trigger ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_safety_island ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_hv_sense_sync ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_ignition_counter ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_mode_arbiter ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_mode_manager ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_motor_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_perception_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_permit_fsm ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_reset_manager ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_reset_sync ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_sensor_acquisition ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_sensor_conditioning ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_sensor_fault_detect ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_sensor_plausibility ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_service_guidance ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_serviceability_mgr ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_sos_builder ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207
+=== ivcu_thermal_ai ===
+Warning: Replacing memory \acc with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_health_scorer.v:224
+Warning: Replacing memory \cnt with list of registers. See /home/venky/final_ivcu_project/RTL_V4/ivcu_sensor_plausibility.v:207

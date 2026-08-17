@@ -1,0 +1,180 @@
+violation type: Vertical congestion
+	srcs: net:_01540_ net:_05823_ net:_10014_ net:_10015_ net:sensor_fresh[21] net:net7834 net:net6836 net:net6829 net:net6957 net:net7735 net:clknet_leaf_121_clk_sensor net:clknet_3_7_0_clk_sensor
+	comment: capacity:13 usage:14 congestion:1
+	bbox = (1055.7000, 552.0000) - (1062.6000, 558.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04412_ net:_12662_ net:_12723_ net:inhibit_reason[0] net:sram_addr0[3] net:u_acq.u_det.ch\[50\].dbnc[0] net:u_acq.u_det.ch\[50\].dbnc[1] net:u_acq.u_det.ch\[50\].dbnc[2] net:limp_home_active net:net7717 net:net7748 net:net8168 net:net8501 net:net8562 net:clknet_2_0_0_clk_aon
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (310.5000, 289.8000) - (317.4000, 296.7000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_06481_ net:_06518_ net:_06521_ net:_06853_ net:_33236_ net:net8312 net:net6915 net:net6917 net:net6931 net:net6936 net:net7006 net:net6932 net:net7576 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (379.5000, 324.3000) - (386.4000, 331.2000) on Layer -
+violation type: Vertical congestion
+	srcs: net:net8141 net:_03896_ net:_22332_ net:net8227 net:net8537 net:net8558 net:net9252 net:net8472 net:clknet_leaf_122_clk_sensor net:clknet_3_6_0_clk_sensor net:clknet_3_7_0_clk_sensor net:clknet_5_28__leaf_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1041.9000, 586.5000) - (1048.8000, 593.4000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04906_ net:_16831_ net:_16832_ net:_17576_ net:_17577_ net:_21494_ net:sensor_value_flat[160] net:net7962 net:net8855 net:net8901 net:net9186 net:net8954 net:net9250 net:net9273 net:clknet_2_2_0_clk_aon
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (862.5000, 296.7000) - (869.4000, 303.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_06481_ net:_06508_ net:_06518_ net:_06521_ net:_06794_ net:_18107_ net:net8312 net:net7858 net:net6917 net:net6922 net:net6931 net:net6932 net:net7288 net:net7576 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (379.5000, 338.1000) - (386.4000, 345.0000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_24321_ net:_24322_ net:_24323_ net:_24325_ net:_24326_ net:_24327_ net:net7605 net:net9363 net:net8707 net:clknet_3_5_0_clk_sensor
+	comment: capacity:10 usage:12 congestion:2
+	bbox = (1048.8000, 351.9000) - (1055.7000, 358.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04384_ net:_04390_ net:_06322_ net:_12696_ net:_29883_ net:inhibit_reason[0] net:sram_addr0[3] net:u_acq.u_det.ch\[48\].dead_bad net:limp_home_active net:net8168 net:net8208 net:net8501 net:net8562 net:clknet_2_0_0_clk_aon
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (310.5000, 310.5000) - (317.4000, 317.4000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_06481_ net:_06518_ net:_06521_ net:_06567_ net:_06796_ net:_06852_ net:_18107_ net:net8312 net:net7858 net:net6917 net:net6922 net:net6931 net:net6932 net:net7576 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (379.5000, 331.2000) - (386.4000, 338.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_07516_ net:sensor_value_flat[208] net:sensor_value_flat[209] net:sensor_value_flat[215] net:sensor_value_flat[243] net:net7489 net:net8225 net:net9037 net:net9209 net:net8817 net:clknet_2_2_0_clk_aon net:clknet_leaf_186_clk_sensor net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:17 congestion:3
+	bbox = (841.8000, 193.2000) - (848.7000, 200.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_09662_ net:_09664_ net:_09669_ net:u_acq.u_det.ch\[18\].dbnc[3] net:u_hv.iso_ok net:net8451 net:net9234 net:net9453 net:net6136 net:net6944 net:clknet_2_3_0_clk_aon net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1028.1000, 538.2000) - (1035.0000, 545.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04866_ net:_05823_ net:_10015_ net:_21534_ net:_21601_ net:_21602_ net:sensor_fresh[21] net:net6829 net:net6957 net:net7735 net:clknet_leaf_121_clk_sensor net:clknet_3_7_0_clk_sensor
+	comment: capacity:13 usage:14 congestion:1
+	bbox = (1055.7000, 538.2000) - (1062.6000, 545.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_16152_ net:_31285_ net:_31325_ net:sensor_value_flat[164] net:sensor_value_flat[180] net:sensor_value_flat[181] net:sensor_value_flat[196] net:sensor_value_flat[197] net:net7489 net:net9209 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:16 congestion:2
+	bbox = (841.8000, 262.2000) - (848.7000, 269.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_12660_ net:_12662_ net:_12663_ net:_12665_ net:inhibit_reason[0] net:sram_addr0[3] net:u_acq.u_det.ch\[48\].dead_cnt[0] net:u_acq.u_det.ch\[48\].dead_cnt[1] net:limp_home_active net:net8168 net:net8208 net:net8501 net:net8562 net:clknet_2_0_0_clk_aon
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (310.5000, 303.6000) - (317.4000, 310.5000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_16449_ net:crash_latched net:u_hv.u_sense.h_cell_tmax[4] net:net7017 net:net7518 net:net7523 net:net7749 net:net7754 net:net8501 net:net5648 net:net7694 net:net7460 net:net7363 net:clknet_2_1_0_clk_aon
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (241.5000, 469.2000) - (248.4000, 476.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:sensor_value_flat[208] net:sensor_value_flat[209] net:sensor_value_flat[215] net:sensor_value_flat[243] net:u_hv.s_hvil[5] net:net7489 net:net9037 net:net9209 net:net8817 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:15 congestion:1
+	bbox = (841.8000, 200.1000) - (848.7000, 207.0000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_09782_ net:_21718_ net:_21729_ net:sensor_value_flat[355] net:sensor_value_flat[357] net:net7519 net:net7951 net:net8216 net:net9453 net:net7008 net:clknet_2_3_0_clk_aon net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1028.1000, 483.0000) - (1035.0000, 489.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:sensor_value_flat[209] net:sensor_value_flat[211] net:sensor_value_flat[212] net:sensor_value_flat[215] net:sensor_value_flat[233] net:sensor_value_flat[243] net:net7489 net:net7685 net:net9037 net:net9209 net:net9063 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:17 congestion:3
+	bbox = (841.8000, 227.7000) - (848.7000, 234.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04877_ net:_16877_ net:_31261_ net:_31262_ net:sensor_value_flat[164] net:sensor_value_flat[180] net:sensor_value_flat[181] net:sensor_value_flat[196] net:sensor_value_flat[197] net:net7489 net:net9209 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:17 congestion:3
+	bbox = (841.8000, 276.0000) - (848.7000, 282.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05238_ net:_30642_ net:sensor_value_flat[208] net:sensor_value_flat[209] net:sensor_value_flat[243] net:net8225 net:net9037 net:net9209 net:net8817 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:15 congestion:1
+	bbox = (841.8000, 179.4000) - (848.7000, 186.3000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_15610_ net:_16012_ net:_16826_ net:_16878_ net:_21490_ net:_32122_ net:sensor_value_flat[166] net:sensor_value_flat[200] net:net8901 net:net9120 net:net9209 net:net9232 net:net9231 net:clknet_3_4_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (848.7000, 282.9000) - (855.6000, 289.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05505_ net:_05516_ net:_05549_ net:_06481_ net:_18107_ net:_18435_ net:_18436_ net:net6642 net:net7076 net:net7071 net:net7793 net:net6645 net:net6918 net:net6921 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (393.3000, 276.0000) - (400.2000, 282.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:net8141 net:_10268_ net:_22332_ net:net8227 net:net8537 net:net8558 net:net9252 net:net8472 net:net6250 net:clknet_leaf_122_clk_sensor net:clknet_3_6_0_clk_sensor net:clknet_3_7_0_clk_sensor net:clknet_5_28__leaf_clk_sensor
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (1041.9000, 579.6000) - (1048.8000, 586.5000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_09782_ net:_21688_ net:_21705_ net:_21729_ net:sensor_value_flat[355] net:sensor_value_flat[357] net:net7197 net:net7519 net:net7951 net:net8216 net:net8215 net:net7241 net:clknet_2_3_0_clk_aon net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:18 congestion:3
+	bbox = (1028.1000, 476.1000) - (1035.0000, 483.0000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_20678_ net:_20684_ net:_20726_ net:_20735_ net:_20758_ net:hv_encl_press[6] net:hv_encl_press[7] net:u_emg.u_sos.p_age[10] net:u_emg.u_sos.p_age[12] net:u_emg.u_sos.p_press[7] net:net6622 net:net8286 net:clknet_leaf_15_clk_aon net:clknet_3_2_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (144.9000, 558.9000) - (151.8000, 565.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05823_ net:_10031_ net:sensor_fresh[21] net:net7834 net:net6836 net:net6829 net:net6957 net:net7735 net:clknet_2_3_0_clk_aon net:clknet_3_7_0_clk_sensor
+	comment: capacity:13 usage:14 congestion:1
+	bbox = (1055.7000, 565.8000) - (1062.6000, 572.7000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_30661_ net:_30662_ net:sensor_value_flat[208] net:sensor_value_flat[209] net:sensor_value_flat[243] net:net7489 net:net8225 net:net9037 net:net9209 net:net8817 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:16 congestion:2
+	bbox = (841.8000, 186.3000) - (848.7000, 193.2000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_16449_ net:crash_latched net:net7017 net:net7518 net:net7523 net:net7749 net:net7754 net:net8556 net:net9141 net:net5648 net:net7694 net:net7460 net:net7363 net:clknet_2_1_0_clk_aon
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (241.5000, 483.0000) - (248.4000, 489.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05505_ net:_05516_ net:_06455_ net:_06481_ net:_18107_ net:_25262_ net:net7076 net:net7298 net:net7793 net:net8636 net:net6921 net:net7775 net:clknet_leaf_212_clk_sensor net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (393.3000, 296.7000) - (400.2000, 303.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_06455_ net:_06481_ net:_06518_ net:_06521_ net:_06552_ net:_06856_ net:_06858_ net:net8312 net:net6917 net:net6931 net:net7006 net:net6932 net:net7576 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (379.5000, 317.4000) - (386.4000, 324.3000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_31262_ net:sensor_value_flat[164] net:sensor_value_flat[180] net:sensor_value_flat[181] net:sensor_value_flat[196] net:sensor_value_flat[197] net:net6702 net:net7489 net:net9124 net:net9209 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:16 congestion:2
+	bbox = (841.8000, 269.1000) - (848.7000, 276.0000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05553_ net:_06403_ net:_06405_ net:_06481_ net:_06508_ net:_06518_ net:_06521_ net:_18107_ net:net8312 net:net6917 net:net6922 net:net6931 net:net6932 net:net8113 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (379.5000, 345.0000) - (386.4000, 351.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_06034_ net:u_acq.samp_chan[1] net:u_acq.u_cond.ch\[17\].acc[2] net:u_acq.u_det.ch\[26\].live net:net8619 net:net9285 net:net9355 net:net8428 net:net8426 net:net7527 net:net7568 net:clknet_2_1_0_clk_sensor net:clknet_leaf_21_clk_ai
+	comment: capacity:14 usage:15 congestion:1
+	bbox = (220.8000, 420.9000) - (227.7000, 427.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_16449_ net:crash_latched net:net7017 net:net7518 net:net7523 net:net7749 net:net7754 net:net8501 net:net8556 net:net9141 net:net5648 net:net7694 net:net7460 net:net7363 net:clknet_2_1_0_clk_aon
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (241.5000, 476.1000) - (248.4000, 483.0000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_01674_ net:_01675_ net:_05451_ net:_17869_ net:_22406_ net:_22536_ net:_22544_ net:_32913_ net:hv_on net:net8856 net:net9234 net:net9453 net:net6944 net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1028.1000, 572.7000) - (1035.0000, 579.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05823_ net:_06263_ net:_09918_ net:sensor_fresh[21] net:u_acq.u_det.ch\[21\].dead_cnt[0] net:u_acq.u_det.ch\[21\].dead_cnt[1] net:u_acq.u_det.ch\[23\].prev_raw[9] net:net7834 net:net6836 net:net7512 net:net7735 net:clknet_2_3_0_clk_aon
+	comment: capacity:13 usage:14 congestion:1
+	bbox = (1055.7000, 579.6000) - (1062.6000, 586.5000) on Layer -
+violation type: Vertical congestion
+	srcs: net:system_health_score[7] net:_03601_ net:_04411_ net:_12662_ net:_12726_ net:_32820_ net:inhibit_reason[0] net:sram_addr0[3] net:limp_home_active net:net7717 net:net7748 net:net8166 net:net8562 net:clknet_2_0_0_clk_aon
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (310.5000, 276.0000) - (317.4000, 282.9000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_32116_ net:_32117_ net:_32118_ net:sensor_value_flat[208] net:sensor_value_flat[209] net:sensor_value_flat[215] net:sensor_value_flat[243] net:net7489 net:net9037 net:net9209 net:net8817 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:17 congestion:3
+	bbox = (841.8000, 213.9000) - (848.7000, 220.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_32117_ net:sensor_value_flat[209] net:sensor_value_flat[211] net:sensor_value_flat[215] net:sensor_value_flat[216] net:sensor_value_flat[233] net:sensor_value_flat[243] net:net7489 net:net7685 net:net9037 net:net9209 net:clknet_2_2_0_clk_aon net:clknet_3_4_0_clk_sensor
+	comment: capacity:14 usage:17 congestion:3
+	bbox = (841.8000, 220.8000) - (848.7000, 227.7000) on Layer -
+violation type: Vertical congestion
+	srcs: net:net8672 net:_09782_ net:_21688_ net:_21704_ net:_21729_ net:_21738_ net:sensor_value_flat[355] net:net7197 net:net7519 net:net7951 net:net8216 net:net8215 net:net7241 net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1028.1000, 469.2000) - (1035.0000, 476.1000) on Layer -
+violation type: Vertical congestion
+	srcs: net:net8672 net:_09782_ net:_10134_ net:_21738_ net:_21740_ net:sensor_value_flat[354] net:sensor_value_flat[358] net:net7197 net:net7519 net:net8216 net:net8215 net:net8699 net:net8688 net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (1028.1000, 455.4000) - (1035.0000, 462.3000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_12659_ net:_12660_ net:_12662_ net:_12664_ net:inhibit_reason[0] net:sram_addr0[3] net:u_acq.u_det.ch\[48\].dead_cnt[0] net:limp_home_active net:net7717 net:net8168 net:net8208 net:net8210 net:net8501 net:net8562 net:clknet_2_0_0_clk_aon
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (310.5000, 296.7000) - (317.4000, 303.6000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_04603_ net:_10276_ net:_10282_ net:_10283_ net:_10285_ net:_32663_ net:charge_inh_aon net:sensor_fresh[21] net:u_acq.u_det.ch\[23\].kind[0] net:net8314 net:net6829 net:net6957 net:clknet_3_7_0_clk_sensor
+	comment: capacity:13 usage:15 congestion:2
+	bbox = (1055.7000, 517.5000) - (1062.6000, 524.4000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05452_ net:_22332_ net:_22374_ net:_22375_ net:_22577_ net:u_hv.iso_ok net:net8856 net:net9234 net:net9453 net:net8739 net:net6944 net:clknet_2_3_0_clk_aon net:clknet_3_6_0_clk_sensor
+	comment: capacity:15 usage:17 congestion:2
+	bbox = (1028.1000, 558.9000) - (1035.0000, 565.8000) on Layer -
+violation type: Vertical congestion
+	srcs: net:_05505_ net:_05516_ net:_06455_ net:_06481_ net:_18107_ net:_18423_ net:_18426_ net:_18437_ net:net6642 net:net7076 net:net7793 net:net6645 net:net6921 net:clknet_0_clk_mcu_regs
+	comment: capacity:15 usage:16 congestion:1
+	bbox = (393.3000, 282.9000) - (400.2000, 289.8000) on Layer -

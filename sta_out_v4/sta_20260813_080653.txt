@@ -1,0 +1,4 @@
+
+=== netlist: /home/venky/final_ivcu_project/synth_out_v4/ivcu_ev_v4_top_netlist_20260813_075719.v ===
+
+Error: ivcu_ev_v4.sdc line 124, set_input_delay requires two positional arguments.

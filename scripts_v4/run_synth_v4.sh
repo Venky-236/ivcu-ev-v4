@@ -66,6 +66,25 @@ if [ "${RUNNING}" != "0" ]; then
   exit 1
 fi
 
+#-----------------------------------------------------------------------------
+# FILTERED LIBERTY
+#
+# The first V4 STA run had a 9.967 ns delay through a single
+# sky130_fd_sc_hd__lpflow_isobufsrc_1 on the paddr decode path.  That cell is a
+# power-gating isolation buffer - slow and weak by design - and ABC picked it
+# because nothing told it not to.  Filtering it and its relatives out is what
+# every serious Sky130 flow does.
+#-----------------------------------------------------------------------------
+LIB_FILTERED="${ROOT}/libs/sky130_fd_sc_hd__tt_025C_1v80__filtered.lib"
+
+if [ ! -f "${LIB_FILTERED}" ] || [ "${LIB}" -nt "${LIB_FILTERED}" ]; then
+  echo "  building filtered liberty ..."
+  python3 "${HERE}/filter_liberty.py" "${LIB}" "${LIB_FILTERED}" || exit 1
+fi
+LIB="${LIB_FILTERED}"
+echo "  using liberty: $(basename "${LIB}")"
+echo
+
 echo "  free memory before start:"
 free -h | sed 's/^/    /'
 echo
@@ -146,9 +165,13 @@ grep "Chip area for" "${LOGFILE}" | sed 's/^/  /'
 echo
 grep -E "Elapsed \(wall|Maximum resident" "${TIMEFILE}" | sed 's/^/  /'
 echo
-echo "  cells by type, top 20:"
-sed -n '/=== ivcu_ev_v4_top ===/,/^$/p' "${LOGFILE}" \
-  | grep -E "sky130_fd_sc_hd|sram_" | sort -k2 -rn | head -20 | sed 's/^/    /'
+echo "  most-used cells:"
+# The stat section runs from the module header to the "Chip area" line; the
+# earlier version stopped at the first blank line, which is the line directly
+# after the header, so it printed nothing.
+sed -n "/=== ${TOP} ===/,/Chip area/p" "${LOGFILE}" \
+  | grep -E "sky130_fd_sc_hd__|sram_" \
+  | sort -k1 -rn | head -15 | sed 's/^/    /'
 echo
 echo "  V3 baseline for comparison:"
 echo "    standard cells        633,274 um2"
