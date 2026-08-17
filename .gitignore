@@ -40,3 +40,15 @@ RTL_backup_*/
 !synth_out_v4/synth_*.log
 HANDOFF_V4_STAGE2_PDN.md
 qc_v4/iverilog.log
+RTL/
+scripts/
+sta_out/
+sim/
+SDC/ivcu_ev_v3.sdc
+SDC/ivcu_ev_vtop.sdc
+ivcu_ev_v3_chip_block_diagram.png
+IVCU_architecture_explained.md
+IVCU_flow_explained.md
+IVCU_floorplan_explained.md
+IVCU_rtl_change_plan.md
+WHERE_WE_ARE.md
