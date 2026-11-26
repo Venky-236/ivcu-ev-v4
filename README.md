@@ -222,6 +222,12 @@ Layout databases (`.odb`, DEF) and gate-level netlists are excluded from version
 
 The physical-design *reports* are kept, since they are the evidence behind the numbers above.
 
+## How the RTL was produced
+
+The V4 Verilog was generated with the help of an AI language model, then taken apart and rebuilt over roughly two months. What arrived did not synthesise — unsupported constructs, mismatched widths, missing resets, modules that elaborated into nothing implementable. I learned Yosys well enough to map each error class back to the defect behind it, and fixed them one at a time until the design elaborated and synthesised clean.
+
+The architecture documented above is mine: the isolated HV safety island, the compile-time bypass mask that synthesis folds away, removing every divider and multiplier, the three CDC patterns and where each is used, and the 1,344-to-237 pin rework. So are the constraints, the flow scripts, the R1–R9 rule checker and the whole physical implementation. The original Verilog text was not hand-written by me, and I would rather state that here than let the commit history imply otherwise.
+
 ## Current status and known limitations
 
 Stated plainly, because a repository that lists none tends to have more.
